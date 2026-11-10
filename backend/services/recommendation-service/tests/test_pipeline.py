@@ -129,6 +129,20 @@ def test_top_n_and_more_list(make_app, stack):
     assert all(m["reason"].startswith("Rule reason") for m in d["more"])
 
 
+def test_stronger_eligibility_match_outranks_better_retrieval_hit(make_app, stack):
+    # Retrieval puts the weaker (generic-rule) match first; the scheme-specific match must still lead,
+    # both in what the model is shown (and so returns) and in the "more" list.
+    stack.chunks = [chunk("c_ayush_1", "ayushman", "Health cover of 5 lakh."), chunk("c_suk_1", "sukanya", "Savings for girl child."),
+                    chunk("c_kisan_1", "pm_kisan", "PM-KISAN gives 6000 rupees per year.")]
+    with TestClient(make_app()) as c:
+        assert recs(post(c, top_n=3)) == ["pm_kisan", "ayushman", "sukanya"]
+    stack.llm_mode = "only_first"
+    with TestClient(make_app()) as c:
+        d = post(c, top_n=1, language="en").json()
+    assert [r["scheme_id"] for r in d["recommendations"]] == ["pm_kisan"]
+    assert [m["scheme_id"] for m in d["more"]] == ["ayushman", "sukanya"]
+
+
 def test_more_includes_eligible_schemes_without_retrieved_docs(make_app, stack):
     stack.elig.append(elig("no_docs_scheme", score=0.75))
     with TestClient(make_app()) as c:

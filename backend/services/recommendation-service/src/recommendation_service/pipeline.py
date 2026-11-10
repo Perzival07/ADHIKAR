@@ -12,7 +12,7 @@ from haqdaar_common import Cache, get_request_id, profile_hash, redact_profile
 from . import prompts
 from .clients import Clients, DependencyError
 from .config import Settings
-from .context import build_context, escape_doc_text, group_by_scheme
+from .context import build_context, by_eligibility, escape_doc_text, group_by_scheme
 from .contract_models import (
     ChatMessage,
     ChatRequest,
@@ -214,7 +214,8 @@ class Pipeline:
         # 5. "more": validated overflow, then retrieved-but-omitted, then remaining eligible
         top, overflow = recs[: req.top_n], recs[req.top_n :]
         used = {r.scheme_id for r in recs}
-        retrieved_ids = [sid for sid in group_by_scheme(chunks) if sid in elig and elig[sid].status in ("eligible", "unknown")]
+        retrieved_ids = by_eligibility(
+            [sid for sid in group_by_scheme(chunks) if sid in elig and elig[sid].status in ("eligible", "unknown")], elig)
         omitted = [sid for sid in retrieved_ids if sid not in used]
         more = list(overflow)
         more += rules_only(elig, chunks, req.include_citations, ids=omitted)

@@ -55,7 +55,7 @@ schemes:
         score: 1.0
         reason: "You qualify as a woman aged {age} in Madhya Pradesh for direct ₹1,250/month DBT under Ladli Behna Yojana."
 
-  bihar_kanya_utthan:
+  br_kanya_utthan:
     outcomes:
       - when:
           all:
@@ -206,7 +206,7 @@ schemes:
         score: 1.0
         reason: "You qualify as an unemployed degree/diploma holder in Karnataka aged {age} for ₹1,500 - ₹3,000/month allowance under Yuva Nidhi."
 
-  mh_yuva_karyaprashikshan:
+  mh_yuva_karya:
     outcomes:
       - when:
           all:
@@ -242,14 +242,14 @@ schemes:
         score: 1.0
         reason: "You qualify as the female head of household in Karnataka for ₹2,000/month direct cash assistance."
 
-  or_kalia:
+  od_kalia_scheme:
     outcomes:
       - when: {all: [{eq: [state, Odisha]}, {any: [{is: isFarmer}, {eq: [occupation, "Daily Wage / Laborer"]}]}]}
         status: eligible
         score: 1.0
         reason: "You qualify as a farmer or landless agricultural laborer in Odisha for ₹10,000 - ₹12,500 livelihood assistance."
 
-  pb_ashirwad:
+  pb_ashirwad_scheme:
     outcomes:
       - when:
           all:

@@ -47,8 +47,21 @@ def group_by_scheme(chunks: list[Chunk]) -> dict[str, list[Chunk]]:
     return out
 
 
+def by_eligibility(scheme_ids: list[str], elig: dict[str, EligibilityResult]) -> list[str]:
+    """Eligible before unknown, then higher eligibility score; the incoming (retrieval) order breaks ties.
+
+    Same precedence as the rules-only fallback. Without it a scheme matched by its own specific rule (score 1.0)
+    can be pushed out of the top results by schemes that only passed the generic rules, purely on retrieval order.
+    """
+    def key(sid: str) -> tuple[bool, float]:
+        e = elig.get(sid)
+        return (e is None or e.status != "eligible", -(e.score if e else 0.0))
+    return sorted(scheme_ids, key=key)  # stable sort keeps retrieval order within equal keys
+
+
 def build_context(chunks: list[Chunk], elig: dict[str, EligibilityResult], budget_tokens: int) -> ContextBundle:
-    grouped = group_by_scheme(chunks)
+    by_scheme = group_by_scheme(chunks)
+    grouped = {sid: by_scheme[sid] for sid in by_eligibility(list(by_scheme), elig)}
     used = 0
     chosen: dict[str, list[Chunk]] = {}
     for sid, cs in grouped.items():

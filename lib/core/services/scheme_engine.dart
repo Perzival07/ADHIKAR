@@ -199,7 +199,7 @@ class SchemeEngine {
           }
           break;
 
-        case 'bihar_kanya_utthan':
+        case 'br_kanya_utthan':
           if (profile.state == 'Bihar' && (profile.gender == 'Female' && (profile.isStudent || profile.age <= 28))) {
             score = 1.0;
             reasonEn = 'You qualify as a female student in Bihar for up to ₹50,000 graduation incentive or ₹25,000 intermediate incentive.';
@@ -315,7 +315,7 @@ class SchemeEngine {
           }
           break;
 
-        case 'mh_yuva_karyaprashikshan':
+        case 'mh_yuva_karya':
           if (profile.state == 'Maharashtra' && profile.age >= 18 && profile.age <= 35 && (profile.isStudent || profile.occupation != 'Salaried')) {
             score = 1.0;
             reasonEn = 'You qualify as an educated youth in Maharashtra aged ${profile.age} for ₹6,000 - ₹10,000/month internship stipend under Yuva Karya Prashikshan Yojana.';
@@ -339,7 +339,7 @@ class SchemeEngine {
           }
           break;
 
-        case 'or_kalia':
+        case 'od_kalia_scheme':
           if (profile.state == 'Odisha' && (profile.isFarmer || profile.occupation == 'Daily Wage / Laborer')) {
             score = 1.0;
             reasonEn = 'You qualify as a farmer or landless agricultural laborer in Odisha for ₹10,000 - ₹12,500 livelihood assistance.';
@@ -347,7 +347,7 @@ class SchemeEngine {
           }
           break;
 
-        case 'pb_ashirwad':
+        case 'pb_ashirwad_scheme':
           if (profile.state == 'Punjab' && (profile.socialCategory == 'SC' || profile.socialCategory == 'OBC' || profile.hasBplOrAay) && (profile.hasGirlChildUnder10 || (profile.gender == 'Female' && profile.age >= 18))) {
             score = 1.0;
             reasonEn = 'You qualify in Punjab for ₹51,000 financial grant for daughter\'s marriage under the Ashirwad Scheme.';

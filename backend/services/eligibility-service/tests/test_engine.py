@@ -119,6 +119,21 @@ def test_all_shipped_rule_files_validate_against_schema_and_dsl():
         assert yaml.safe_load(f.read_text())["version"] == 1
 
 
+# Rules for schemes that are not in the corpus yet. They are dead until a document with that scheme_id is added.
+# Do not add to this list to silence the test below: a rule keyed by a misspelt id silently never runs
+# (e.g. `pb_ashirwad` vs the real `pb_ashirwad_scheme`), and the scheme falls through to the generic rules.
+RULES_AWAITING_CORPUS = {
+    "dl_mahila_samman", "mgnrega", "nsap_disability_pension", "nsap_widow_pension", "pm_suraksha_bima",
+    "post_matric_scholarship", "rj_chiranjeevi", "up_abhyudaya", "wb_lakshmir_bhandar",
+}
+
+
+def test_every_scheme_rule_targets_a_scheme_in_the_corpus(schemes, rules):
+    orphans = set(rules.specific) - set(schemes) - RULES_AWAITING_CORPUS
+    assert not orphans, f"rules keyed by ids that match no scheme document (typo?): {sorted(orphans)}"
+    assert not RULES_AWAITING_CORPUS & set(schemes), "a scheme was added to the corpus: drop it from RULES_AWAITING_CORPUS"
+
+
 def _write_rules(tmp_path, mutate):
     for f in RULES_DIR.iterdir():
         (tmp_path / f.name).write_text(f.read_text())

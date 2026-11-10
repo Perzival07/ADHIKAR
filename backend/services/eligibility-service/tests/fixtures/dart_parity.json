@@ -30,8 +30,8 @@
     "reason": "You qualify as a woman aged 30 residing in Maharashtra with family income under ₹2.5 Lakh for ₹1,500/month DBT."
    },
    "mh_yuva_karya": {
-    "score": 0.95,
-    "reason": "You qualify as a resident of Maharashtra for this flagship state entitlement (Employment & Livelihood)."
+    "score": 1.0,
+    "reason": "You qualify as an educated youth in Maharashtra aged 30 for ₹6,000 - ₹10,000/month internship stipend under Yuva Karya Prashikshan Yojana."
    },
    "mh_mjpjay_health": {
     "score": 0.95,
@@ -1165,13 +1165,13 @@
     "score": 1.0,
     "reason": "You qualify because you are 30 years old (eligible entry 18-40) and work in the unorganized sector without paying income tax."
    },
+   "pb_ashirwad_scheme": {
+    "score": 1.0,
+    "reason": "You qualify in Punjab for ₹51,000 financial grant for daughter's marriage under the Ashirwad Scheme."
+   },
    "pb_free_electricity": {
     "score": 0.95,
     "reason": "You qualify as a resident of Punjab for this flagship state entitlement (Financial Inclusion)."
-   },
-   "pb_ashirwad_scheme": {
-    "score": 0.95,
-    "reason": "You qualify as a resident of Punjab for this flagship state entitlement (Women & Child Development)."
    },
    "pb_widow_pension": {
     "score": 0.95,
@@ -2173,10 +2173,6 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Madhya Pradesh jurisdiction."
    },
-   "mh_yuva_karya": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Maharashtra jurisdiction."
-   },
    "mh_mjpjay_health": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Maharashtra jurisdiction."
@@ -2221,13 +2217,13 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    },
+   "mz_health_care": {
+    "score": 0.75,
+    "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
+   },
    "wb_swasthya_sathi": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
-   },
-   "mz_civil_services_myc": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    },
    "nl_cmhis_health": {
     "score": 0.75,
@@ -2365,7 +2361,7 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
    },
-   "mz_health_care": {
+   "mz_civil_services_myc": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    }
@@ -2578,8 +2574,8 @@
     "reason": "You qualify because your household holds a None card with annual income in the < 1 Lakh bracket."
    },
    "br_kanya_utthan": {
-    "score": 0.95,
-    "reason": "You qualify as a resident of Bihar for this flagship state entitlement (Women & Child Development)."
+    "score": 1.0,
+    "reason": "You qualify as a female student in Bihar for up to ₹50,000 graduation incentive or ₹25,000 intermediate incentive."
    },
    "br_kushal_yuva": {
     "score": 0.95,
@@ -2626,8 +2622,8 @@
     "reason": "You qualify because you are 22 years old (eligible entry 18-40) and work in the unorganized sector without paying income tax."
    },
    "br_kanya_utthan": {
-    "score": 0.95,
-    "reason": "You qualify as a resident of Bihar for this flagship state entitlement (Women & Child Development)."
+    "score": 1.0,
+    "reason": "You qualify as a female student in Bihar for up to ₹50,000 graduation incentive or ₹25,000 intermediate incentive."
    },
    "br_udyami_yojana": {
     "score": 0.95,
@@ -7953,6 +7949,10 @@
     "score": 1.0,
     "reason": "You qualify as the parent/guardian of a girl child under 10 years of age for high-interest (8.2%) sovereign savings."
    },
+   "pb_ashirwad_scheme": {
+    "score": 1.0,
+    "reason": "You qualify in Punjab for ₹51,000 financial grant for daughter's marriage under the Ashirwad Scheme."
+   },
    "pb_disabled_pension": {
     "score": 0.95,
     "reason": "You qualify as a resident of Punjab for this flagship state entitlement (Social Security & Pension)."
@@ -8928,6 +8928,10 @@
    "pm_ujjwala": {
     "score": 1.0,
     "reason": "You qualify as an adult woman (55 years) from an eligible SC household without active LPG."
+   },
+   "pb_ashirwad_scheme": {
+    "score": 1.0,
+    "reason": "You qualify in Punjab for ₹51,000 financial grant for daughter's marriage under the Ashirwad Scheme."
    },
    "pb_free_electricity": {
     "score": 0.95,
@@ -10216,6 +10220,10 @@
    "pm_ujjwala": {
     "score": 1.0,
     "reason": "You qualify as an adult woman (45 years) from an eligible EWS household without active LPG."
+   },
+   "br_kanya_utthan": {
+    "score": 1.0,
+    "reason": "You qualify as a female student in Bihar for up to ₹50,000 graduation incentive or ₹25,000 intermediate incentive."
    },
    "br_udyami_yojana": {
     "score": 0.95,
@@ -12785,10 +12793,6 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Madhya Pradesh jurisdiction."
    },
-   "mh_yuva_karya": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Maharashtra jurisdiction."
-   },
    "mh_mjpjay_health": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Maharashtra jurisdiction."
@@ -12849,13 +12853,13 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    },
+   "mz_disability_pension": {
+    "score": 0.75,
+    "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
+   },
    "wb_saboojsathi": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
-   },
-   "nl_cmhis_health": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Nagaland jurisdiction."
    },
    "nl_post_matric_scholarship": {
     "score": 0.75,
@@ -13029,9 +13033,9 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
    },
-   "mz_disability_pension": {
+   "nl_cmhis_health": {
     "score": 0.75,
-    "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
+    "reason": "Flagship state welfare scheme under Nagaland jurisdiction."
    }
   }
  },
@@ -13637,13 +13641,13 @@
     "score": 1.0,
     "reason": "You qualify because you are 19 years old (eligible entry 18-40) and work in the unorganized sector without paying income tax."
    },
+   "mh_yuva_karya": {
+    "score": 1.0,
+    "reason": "You qualify as an educated youth in Maharashtra aged 19 for ₹6,000 - ₹10,000/month internship stipend under Yuva Karya Prashikshan Yojana."
+   },
    "pm_awas_gramin": {
     "score": 0.95,
     "reason": "You qualify as an economically vulnerable rural household (Antyodaya (AAY)) eligible for pucca housing grant under Awas+."
-   },
-   "mh_yuva_karya": {
-    "score": 0.95,
-    "reason": "You qualify as a resident of Maharashtra for this flagship state entitlement (Employment & Livelihood)."
    },
    "mh_mjpjay_health": {
     "score": 0.95,
@@ -15397,6 +15401,10 @@
     "score": 1.0,
     "reason": "You qualify as the parent/guardian of a girl child under 10 years of age for high-interest (8.2%) sovereign savings."
    },
+   "od_kalia_scheme": {
+    "score": 1.0,
+    "reason": "You qualify as a farmer or landless agricultural laborer in Odisha for ₹10,000 - ₹12,500 livelihood assistance."
+   },
    "pm_awas_gramin": {
     "score": 0.95,
     "reason": "You qualify as an economically vulnerable rural household (Priority (PHH)) eligible for pucca housing grant under Awas+."
@@ -15737,10 +15745,6 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Assam jurisdiction."
    },
-   "br_kanya_utthan": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Bihar jurisdiction."
-   },
    "br_udyami_yojana": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Bihar jurisdiction."
@@ -16037,10 +16041,6 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Madhya Pradesh jurisdiction."
    },
-   "mh_yuva_karya": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Maharashtra jurisdiction."
-   },
    "mh_mjpjay_health": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Maharashtra jurisdiction."
@@ -16141,13 +16141,13 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    },
-   "mz_civil_services_myc": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
-   },
    "wb_swasthya_sathi": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
+   },
+   "mz_handloom_weavers": {
+    "score": 0.75,
+    "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    },
    "mz_fishery_assistance": {
     "score": 0.75,
@@ -16185,10 +16185,6 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Nagaland jurisdiction."
    },
-   "od_kalia_scheme": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Odisha jurisdiction."
-   },
    "od_bsky_health": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Odisha jurisdiction."
@@ -16214,10 +16210,6 @@
     "reason": "Flagship state welfare scheme under Odisha jurisdiction."
    },
    "pb_free_electricity": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Punjab jurisdiction."
-   },
-   "pb_ashirwad_scheme": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Punjab jurisdiction."
    },
@@ -16441,7 +16433,7 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
    },
-   "mz_handloom_weavers": {
+   "mz_civil_services_myc": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    }
@@ -16897,13 +16889,13 @@
     "score": 1.0,
     "reason": "You qualify as the parent/guardian of a girl child under 10 years of age for high-interest (8.2%) sovereign savings."
    },
+   "pb_ashirwad_scheme": {
+    "score": 1.0,
+    "reason": "You qualify in Punjab for ₹51,000 financial grant for daughter's marriage under the Ashirwad Scheme."
+   },
    "pb_free_electricity": {
     "score": 0.95,
     "reason": "You qualify as a resident of Punjab for this flagship state entitlement (Financial Inclusion)."
-   },
-   "pb_ashirwad_scheme": {
-    "score": 0.95,
-    "reason": "You qualify as a resident of Punjab for this flagship state entitlement (Women & Child Development)."
    },
    "pb_widow_pension": {
     "score": 0.95,
@@ -17448,6 +17440,10 @@
    "sukanya_samriddhi": {
     "score": 1.0,
     "reason": "You qualify as the parent/guardian of a girl child under 10 years of age for high-interest (8.2%) sovereign savings."
+   },
+   "pb_ashirwad_scheme": {
+    "score": 1.0,
+    "reason": "You qualify in Punjab for ₹51,000 financial grant for daughter's marriage under the Ashirwad Scheme."
    },
    "pb_free_electricity": {
     "score": 0.95,
@@ -20949,9 +20945,9 @@
     "score": 0.85,
     "reason": "You qualify as a patient diagnosed with Tuberculosis and notified on the government Ni-kshay national health portal."
    },
-   "gj_kunwarbai_mameru": {
+   "hr_chirayu": {
     "score": 0.75,
-    "reason": "Flagship state welfare scheme under Gujarat jurisdiction."
+    "reason": "Flagship state welfare scheme under Haryana jurisdiction."
    },
    "jk_smas": {
     "score": 0.75,
@@ -21085,13 +21081,13 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Gujarat jurisdiction."
    },
+   "gj_kunwarbai_mameru": {
+    "score": 0.75,
+    "reason": "Flagship state welfare scheme under Gujarat jurisdiction."
+   },
    "dl_pink_ticket": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Delhi (NCT) jurisdiction."
-   },
-   "hr_chirayu": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Haryana jurisdiction."
    },
    "hr_antyodaya_parivar": {
     "score": 0.75,
@@ -21265,13 +21261,13 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    },
-   "mz_disability_pension": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
-   },
    "wb_swasthya_sathi": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
+   },
+   "mz_handloom_weavers": {
+    "score": 0.75,
+    "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    },
    "nl_cmhis_health": {
     "score": 0.75,
@@ -21306,10 +21302,6 @@
     "reason": "Flagship state welfare scheme under Odisha jurisdiction."
    },
    "pb_free_electricity": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Punjab jurisdiction."
-   },
-   "pb_ashirwad_scheme": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Punjab jurisdiction."
    },
@@ -21453,7 +21445,7 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Uttarakhand jurisdiction."
    },
-   "mz_handloom_weavers": {
+   "mz_disability_pension": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    }
@@ -22657,10 +22649,6 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Assam jurisdiction."
    },
-   "br_kanya_utthan": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Bihar jurisdiction."
-   },
    "br_udyami_yojana": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Bihar jurisdiction."
@@ -22805,10 +22793,6 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Madhya Pradesh jurisdiction."
    },
-   "mh_yuva_karya": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Maharashtra jurisdiction."
-   },
    "mh_mjpjay_health": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Maharashtra jurisdiction."
@@ -22893,13 +22877,13 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Punjab jurisdiction."
    },
+   "pb_pgrkam_employment": {
+    "score": 0.75,
+    "reason": "Flagship state welfare scheme under Punjab jurisdiction."
+   },
    "wb_swasthya_sathi": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
-   },
-   "rj_annapurna_rasoi": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Rajasthan jurisdiction."
    },
    "rj_nishulk_dawa_jaanch": {
     "score": 0.75,
@@ -23057,9 +23041,9 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
    },
-   "pb_pgrkam_employment": {
+   "rj_annapurna_rasoi": {
     "score": 0.75,
-    "reason": "Flagship state welfare scheme under Punjab jurisdiction."
+    "reason": "Flagship state welfare scheme under Rajasthan jurisdiction."
    }
   }
  },
@@ -24633,6 +24617,10 @@
     "score": 1.0,
     "reason": "You qualify as the parent/guardian of a girl child under 10 years of age for high-interest (8.2%) sovereign savings."
    },
+   "od_kalia_scheme": {
+    "score": 1.0,
+    "reason": "You qualify as a farmer or landless agricultural laborer in Odisha for ₹10,000 - ₹12,500 livelihood assistance."
+   },
    "pm_awas_gramin": {
     "score": 0.95,
     "reason": "You qualify as an economically vulnerable rural household (BPL) eligible for pucca housing grant under Awas+."
@@ -25437,10 +25425,6 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Madhya Pradesh jurisdiction."
    },
-   "mh_yuva_karya": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Maharashtra jurisdiction."
-   },
    "mh_mjpjay_health": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Maharashtra jurisdiction."
@@ -25493,13 +25477,13 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    },
+   "mz_health_care": {
+    "score": 0.75,
+    "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
+   },
    "wb_saboojsathi": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
-   },
-   "mz_tribal_scholarship": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    },
    "mz_disability_pension": {
     "score": 0.75,
@@ -25669,7 +25653,7 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
    },
-   "mz_health_care": {
+   "mz_tribal_scholarship": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    }
@@ -29317,10 +29301,6 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Madhya Pradesh jurisdiction."
    },
-   "mh_yuva_karya": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Maharashtra jurisdiction."
-   },
    "mh_mjpjay_health": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Maharashtra jurisdiction."
@@ -29373,13 +29353,13 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    },
+   "mz_health_care": {
+    "score": 0.75,
+    "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
+   },
    "wb_swasthya_sathi": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
-   },
-   "mz_tribal_scholarship": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    },
    "mz_civil_services_myc": {
     "score": 0.75,
@@ -29541,7 +29521,7 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
    },
-   "mz_health_care": {
+   "mz_tribal_scholarship": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    }
@@ -30102,8 +30082,8 @@
     "reason": "You qualify as a woman aged 25 residing in Maharashtra with family income under ₹2.5 Lakh for ₹1,500/month DBT."
    },
    "mh_yuva_karya": {
-    "score": 0.95,
-    "reason": "You qualify as a resident of Maharashtra for this flagship state entitlement (Employment & Livelihood)."
+    "score": 1.0,
+    "reason": "You qualify as an educated youth in Maharashtra aged 25 for ₹6,000 - ₹10,000/month internship stipend under Yuva Karya Prashikshan Yojana."
    },
    "mh_mjpjay_health": {
     "score": 0.95,
@@ -30668,6 +30648,10 @@
    "pm_ujjwala": {
     "score": 1.0,
     "reason": "You qualify as an adult woman (45 years) from an eligible ST household without active LPG."
+   },
+   "br_kanya_utthan": {
+    "score": 1.0,
+    "reason": "You qualify as a female student in Bihar for up to ₹50,000 graduation incentive or ₹25,000 intermediate incentive."
    },
    "pm_awas_gramin": {
     "score": 0.95,
@@ -32857,10 +32841,6 @@
     "score": 1.0,
     "reason": "You qualify as the parent/guardian of a girl child under 10 years of age for high-interest (8.2%) sovereign savings."
    },
-   "br_kanya_utthan": {
-    "score": 0.95,
-    "reason": "You qualify as a resident of Bihar for this flagship state entitlement (Women & Child Development)."
-   },
    "br_udyami_yojana": {
     "score": 0.95,
     "reason": "You qualify as a resident of Bihar for this flagship state entitlement (Employment & Livelihood)."
@@ -33225,7 +33205,7 @@
     "score": 0.85,
     "reason": "You qualify as a patient diagnosed with Tuberculosis and notified on the government Ni-kshay national health portal."
    },
-   "hr_nirogi_haryana": {
+   "hr_bhavantar_bharpayee": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Haryana jurisdiction."
    },
@@ -33389,13 +33369,13 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Haryana jurisdiction."
    },
-   "hr_bhavantar_bharpayee": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Haryana jurisdiction."
-   },
    "dl_pink_ticket": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Delhi (NCT) jurisdiction."
+   },
+   "hr_nirogi_haryana": {
+    "score": 0.75,
+    "reason": "Flagship state welfare scheme under Haryana jurisdiction."
    },
    "hr_solar_water_pump": {
     "score": 0.75,
@@ -33605,21 +33585,17 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Nagaland jurisdiction."
    },
-   "nl_disability_pension": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Nagaland jurisdiction."
-   },
    "wb_swasthya_sathi": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
    },
-   "nl_coffee_cardamom": {
+   "nl_honey_mission": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Nagaland jurisdiction."
    },
-   "od_kalia_scheme": {
+   "nl_coffee_cardamom": {
     "score": 0.75,
-    "reason": "Flagship state welfare scheme under Odisha jurisdiction."
+    "reason": "Flagship state welfare scheme under Nagaland jurisdiction."
    },
    "od_bsky_health": {
     "score": 0.75,
@@ -33829,7 +33805,7 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
    },
-   "nl_honey_mission": {
+   "nl_disability_pension": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Nagaland jurisdiction."
    }
@@ -34497,6 +34473,10 @@
     "score": 1.0,
     "reason": "You qualify as the parent/guardian of a girl child under 10 years of age for high-interest (8.2%) sovereign savings."
    },
+   "pb_ashirwad_scheme": {
+    "score": 1.0,
+    "reason": "You qualify in Punjab for ₹51,000 financial grant for daughter's marriage under the Ashirwad Scheme."
+   },
    "pm_awas_gramin": {
     "score": 0.95,
     "reason": "You qualify as an economically vulnerable rural household (Antyodaya (AAY)) eligible for pucca housing grant under Awas+."
@@ -34877,10 +34857,6 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Madhya Pradesh jurisdiction."
    },
-   "mh_yuva_karya": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Maharashtra jurisdiction."
-   },
    "mh_mjpjay_health": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Maharashtra jurisdiction."
@@ -34921,13 +34897,13 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Meghalaya jurisdiction."
    },
+   "ml_social_audit": {
+    "score": 0.75,
+    "reason": "Flagship state welfare scheme under Meghalaya jurisdiction."
+   },
    "wb_swasthya_sathi": {
     "score": 0.75,
     "reason": "Flagship state welfare scheme under West Bengal jurisdiction."
-   },
-   "mz_sedp_livelihood": {
-    "score": 0.75,
-    "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    },
    "mz_health_care": {
     "score": 0.75,
@@ -35061,9 +35037,9 @@
     "score": 0.75,
     "reason": "Flagship state welfare scheme under Uttarakhand jurisdiction."
    },
-   "ml_social_audit": {
+   "mz_sedp_livelihood": {
     "score": 0.75,
-    "reason": "Flagship state welfare scheme under Meghalaya jurisdiction."
+    "reason": "Flagship state welfare scheme under Mizoram jurisdiction."
    }
   }
  },
