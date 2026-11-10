@@ -334,7 +334,7 @@ sequenceDiagram
     R->>G: POST /v1/chat {model_alias: recommender, messages, json_schema}
     G->>O: /api/chat (format = schema, num_ctx 4096)
     O-->>G: JSON text
-    G->>G: validate; one repair round if invalid
+    G->>G: validate JSON, one repair round if invalid
     G-->>R: {json, usage}
     R->>R: validate_recommendations: drop hallucinations, re-rank eligible first
     R->>G: (only for non en/hi) POST /v1/chat {alias: translate}
@@ -384,7 +384,7 @@ sequenceDiagram
   APP->>R: POST /v1/recommendations  Authorization: Bearer <access>
   R->>A: GET /.well-known/jwks.json (cached, refetched on unknown kid)
   R->>R: verify signature, issuer, audience -> per-account rate limit
-  APP->>A: POST /v1/auth/token/refresh (rotation; replay revokes the family)
+  APP->>A: POST /v1/auth/token/refresh (rotation, replay revokes the family)
 ```
 
 ### 5.4 Scheme detail ("explain")
@@ -424,19 +424,19 @@ The Flutter client mirrors the recommendation contract in `lib/core/models/rag_m
 
 ```mermaid
 flowchart TD
-  MAIN["main.dart<br/>main() -> SettingsService.init(), AuthService.init()"] --> SPL["SplashScreen"]
-  SPL -->|auth.isAuthenticated| NAV["MainNavigationScreen"]
-  SPL -->|else| SIGN["SignInScreen / SignUpScreen / OtpVerificationScreen"]
+  MAIN["main.dart<br/>main: SettingsService.init, AuthService.init"] --> SPL["SplashScreen"]
+  SPL -->|"signed in"| NAV["MainNavigationScreen"]
+  SPL -->|"not signed in"| SIGN["SignInScreen / SignUpScreen / OtpVerificationScreen"]
   SIGN --> AS["AuthService (ChangeNotifier)"]
-  AS -->|AUTH_API_URL set| AAC["AuthApiClient -> auth-service /v1/auth/*"]
-  AS -->|offline| SP["SharedPreferences demo accounts (salted sha256)"]
+  AS -->|"AUTH_API_URL set"| AAC["AuthApiClient -> auth-service /v1/auth/*"]
+  AS -->|"offline"| SP["SharedPreferences demo accounts (salted sha256)"]
   AS --> TS["TokenStore: SecureTokenStore (Keychain/Keystore) | MemoryTokenStore"]
   NAV --> HOME["HomeScreen"] & DIR["SchemesDirectoryScreen"] & INT["InternshipsScreen"] & LAT["LatestUpdatesScreen"] & PROF["ProfileScreen"] & SET["SettingsScreen"]
   HOME --> WIZ["AdaptiveWizardScreen<br/>builds a CitizenProfile"]
-  WIZ -->|SchemeEngine.evaluate(profile)| RES["SchemesResultScreen"]
-  RES -->|_loadAi()| REPO["RecommendationRepository.recommend()"]
-  REPO -->|RAG_API_URL set & AI enabled| RAC["RecommendationApiClient.recommend()<br/>POST /v1/recommendations"]
-  REPO -->|always| ENG["SchemeEngine.evaluate() (fallback + merge)"]
+  WIZ -->|"SchemeEngine.evaluate"| RES["SchemesResultScreen"]
+  RES -->|"_loadAi"| REPO["RecommendationRepository.recommend"]
+  REPO -->|"RAG_API_URL set and AI enabled"| RAC["RecommendationApiClient.recommend<br/>POST /v1/recommendations"]
+  REPO -->|"always"| ENG["SchemeEngine.evaluate: fallback and merge"]
   RAC --> RM["rag_models.dart: RagResponse / RagRecommendation / RagCitation"]
   RES --> DET["SchemeDetailScreen<br/>document checklist, portal link, TTS"]
   SET --> SS["SettingsService: language, state, AI toggle, document checks"]
