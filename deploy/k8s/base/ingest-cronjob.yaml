@@ -1,0 +1,122 @@
+# Nightly ingestion (single writer, concurrencyPolicy Forbid). Run now: kubectl -n haqdaar create job --from=cronjob/ingest ingest-now
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ingest
+  labels:
+    app.kubernetes.io/name: ingest
+    app.kubernetes.io/component: job
+spec:
+  schedule: 30 2 * * *
+  timeZone: Asia/Kolkata
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 3600
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: ingest
+            app.kubernetes.io/component: job
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: haqdaar-workload
+          automountServiceAccountToken: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            fsGroup: 10001
+            seccompProfile:
+              type: RuntimeDefault
+          initContainers:
+          - name: scheme-docs
+            image: ghcr.io/haqdaar/scheme-docs:latest
+            imagePullPolicy: IfNotPresent
+            volumeMounts:
+            - name: docs
+              mountPath: /target
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: &id001
+                drop:
+                - ALL
+              runAsUser: 10001
+            resources:
+              requests:
+                cpu: 10m
+                memory: 16Mi
+              limits:
+                memory: 64Mi
+          containers:
+          - name: ingest
+            image: ghcr.io/haqdaar/ingestion-service:latest
+            imagePullPolicy: IfNotPresent
+            command:
+            - python
+            - -m
+            - ingestion_service
+            - ingest
+            envFrom:
+            - configMapRef:
+                name: haqdaar-config
+            env:
+            - name: INGEST_DOCS_DIR
+              value: /data/scheme_docs
+            - name: INGEST_STATE_DIR
+              value: /state
+            - name: INGEST_CACHE_CLEAR_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: reco-secrets
+                  key: RECO_ADMIN_TOKEN
+                  optional: false
+            resources:
+              requests:
+                cpu: 250m
+                memory: 256Mi
+              limits:
+                cpu: '2'
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: *id001
+            volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: docs
+              mountPath: /data/scheme_docs
+              readOnly: true
+            - name: state
+              mountPath: /state
+          volumes:
+          - name: tmp
+            emptyDir:
+              sizeLimit: 64Mi
+          - name: docs
+            emptyDir:
+              sizeLimit: 256Mi
+          - name: state
+            persistentVolumeClaim:
+              claimName: ingest-state
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ingest-state
+  labels:
+    app.kubernetes.io/name: ingest
+    app.kubernetes.io/component: job
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

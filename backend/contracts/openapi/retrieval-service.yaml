@@ -1,0 +1,252 @@
+openapi: 3.1.0
+info:
+  title: Haqdaar retrieval-service
+  version: 1.0.0
+  description: Contract is versioned by path prefix (/v1). Breaking changes require
+    /v2.
+servers:
+- url: http://localhost:8004
+paths:
+  /health:
+    get:
+      summary: Liveness
+      responses:
+        '200':
+          description: ok
+  /ready:
+    get:
+      summary: Readiness (dependencies reachable)
+      responses:
+        '200':
+          description: ready
+        '503':
+          description: not ready
+  /v1/search:
+    post:
+      summary: Filtered hybrid search
+      operationId: post_v1_search
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '422':
+          description: Validation error
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorResponse
+      type: object
+    SearchFilters:
+      properties:
+        scheme_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          title: Scheme Ids
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: State
+        include_central:
+          default: true
+          title: Include Central
+          type: boolean
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Language
+      title: SearchFilters
+      type: object
+    SearchRequest:
+      properties:
+        query:
+          minLength: 1
+          title: Query
+          type: string
+        filters:
+          $ref: '#/components/schemas/SearchFilters'
+          default:
+            scheme_ids: null
+            state: null
+            include_central: true
+            language: null
+        top_k:
+          default: 10
+          maximum: 100
+          minimum: 1
+          title: Top K
+          type: integer
+        max_chunks_per_scheme:
+          default: 2
+          maximum: 10
+          minimum: 1
+          title: Max Chunks Per Scheme
+          type: integer
+      required:
+      - query
+      title: SearchRequest
+      type: object
+    Chunk:
+      properties:
+        chunk_id:
+          title: Chunk Id
+          type: string
+        scheme_id:
+          title: Scheme Id
+          type: string
+        text:
+          title: Text
+          type: string
+        section:
+          default: ''
+          title: Section
+          type: string
+        page:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          title: Page
+        source:
+          default: ''
+          title: Source
+          type: string
+        meta:
+          anyOf:
+          - $ref: '#/components/schemas/SchemeDocMeta'
+          - type: 'null'
+          default: null
+        score:
+          default: 0.0
+          title: Score
+          type: number
+        flagged:
+          default: false
+          title: Flagged
+          type: boolean
+      required:
+      - chunk_id
+      - scheme_id
+      - text
+      title: Chunk
+      type: object
+    SchemeDocMeta:
+      properties:
+        scheme_id:
+          title: Scheme Id
+          type: string
+        name:
+          title: Name
+          type: string
+        state_scope:
+          default: All
+          title: State Scope
+          type: string
+        is_central:
+          default: true
+          title: Is Central
+          type: boolean
+        category:
+          default: ''
+          title: Category
+          type: string
+        gender_eligibility:
+          default: All
+          enum:
+          - All
+          - Female
+          - Male
+          title: Gender Eligibility
+          type: string
+        income_ceiling:
+          default: No Limit
+          title: Income Ceiling
+          type: string
+        min_age:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          title: Min Age
+        max_age:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          title: Max Age
+        education_level:
+          default: All
+          title: Education Level
+          type: string
+        official_portal_url:
+          default: ''
+          title: Official Portal Url
+          type: string
+        last_verified_date:
+          default: ''
+          title: Last Verified Date
+          type: string
+        language:
+          default: en
+          title: Language
+          type: string
+        source_type:
+          default: corpus
+          enum:
+          - corpus
+          - pdf
+          - web
+          - manual
+          title: Source Type
+          type: string
+        status:
+          default: verified
+          enum:
+          - verified
+          - unverified
+          title: Status
+          type: string
+      required:
+      - scheme_id
+      - name
+      title: SchemeDocMeta
+      type: object
+    SearchResponse:
+      properties:
+        chunks:
+          items:
+            $ref: '#/components/schemas/Chunk'
+          title: Chunks
+          type: array
+      required:
+      - chunks
+      title: SearchResponse
+      type: object

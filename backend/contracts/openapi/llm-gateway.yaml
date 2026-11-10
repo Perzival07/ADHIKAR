@@ -1,0 +1,219 @@
+openapi: 3.1.0
+info:
+  title: Haqdaar llm-gateway
+  version: 1.0.0
+  description: Contract is versioned by path prefix (/v1). Breaking changes require
+    /v2.
+servers:
+- url: http://localhost:8001
+paths:
+  /health:
+    get:
+      summary: Liveness
+      responses:
+        '200':
+          description: ok
+  /ready:
+    get:
+      summary: Readiness (dependencies reachable)
+      responses:
+        '200':
+          description: ready
+        '503':
+          description: not ready
+  /v1/chat:
+    post:
+      summary: Provider-neutral chat/completion by model alias (SSE when stream=true)
+      operationId: post_v1_chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '422':
+          description: Validation error
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/models:
+    get:
+      summary: List configured model aliases
+      operationId: get_v1_models
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelsResponse'
+        '422':
+          description: Validation error
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorResponse
+      type: object
+    ChatMessage:
+      properties:
+        role:
+          enum:
+          - system
+          - user
+          - assistant
+          title: Role
+          type: string
+        content:
+          title: Content
+          type: string
+      required:
+      - role
+      - content
+      title: ChatMessage
+      type: object
+    ChatRequest:
+      properties:
+        model_alias:
+          title: Model Alias
+          type: string
+        messages:
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          minItems: 1
+          title: Messages
+          type: array
+        json_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          default: null
+          title: Json Schema
+        max_tokens:
+          default: 1024
+          maximum: 32768
+          minimum: 1
+          title: Max Tokens
+          type: integer
+        temperature:
+          anyOf:
+          - maximum: 2
+            minimum: 0
+            type: number
+          - type: 'null'
+          default: null
+          title: Temperature
+        stream:
+          default: false
+          title: Stream
+          type: boolean
+      required:
+      - model_alias
+      - messages
+      title: ChatRequest
+      type: object
+    Usage:
+      properties:
+        prompt_tokens:
+          default: 0
+          title: Prompt Tokens
+          type: integer
+        completion_tokens:
+          default: 0
+          title: Completion Tokens
+          type: integer
+      title: Usage
+      type: object
+    ChatResponse:
+      properties:
+        text:
+          title: Text
+          type: string
+        json:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          default: null
+          title: Json
+        usage:
+          $ref: '#/components/schemas/Usage'
+          default:
+            prompt_tokens: 0
+            completion_tokens: 0
+        provider:
+          title: Provider
+          type: string
+        model:
+          title: Model
+          type: string
+      required:
+      - text
+      - provider
+      - model
+      title: ChatResponse
+      type: object
+    ModelAliasInfo:
+      properties:
+        alias:
+          title: Alias
+          type: string
+        provider:
+          title: Provider
+          type: string
+        model:
+          title: Model
+          type: string
+        supports_json_schema:
+          default: false
+          title: Supports Json Schema
+          type: boolean
+        supports_streaming:
+          default: false
+          title: Supports Streaming
+          type: boolean
+        max_context:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          title: Max Context
+      required:
+      - alias
+      - provider
+      - model
+      title: ModelAliasInfo
+      type: object
+    ModelsResponse:
+      properties:
+        aliases:
+          items:
+            $ref: '#/components/schemas/ModelAliasInfo'
+          title: Aliases
+          type: array
+      required:
+      - aliases
+      title: ModelsResponse
+      type: object

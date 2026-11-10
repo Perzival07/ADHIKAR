@@ -1,0 +1,22 @@
+# Retrieval intent keywords. Edit here, not in code.
+default: [welfare, benefit, financial assistance, eligibility, how to apply]
+occupation:
+  Farmer: [farmer, agriculture, crop, land, income support, kisan]
+  Student: [student, scholarship, education, fee, coaching, skill training]
+  Salaried: [insurance, pension, savings, health cover]
+  Self-Employed: [self-employed, loan, micro-enterprise, business, credit]
+  Artisan / Craftsman: [artisan, craftsman, skill training, tool kit, credit]
+  Street Vendor: [street vendor, working capital loan, micro credit]
+  Daily Wage / Laborer: [laborer, wage employment, unorganised worker, social security]
+  Homemaker: [women, household, cash assistance, self-help group]
+  Senior Citizen: [senior citizen, old age pension, health cover]
+  Unemployed: [unemployment allowance, youth, skill training, internship]
+  Citizen: [citizen, social security]
+flags:
+  girl_child: [girl child, daughter, education, marriage assistance, savings]
+  widow: [widow pension, widow assistance]
+  disability: [disability, divyangjan, pension, assistive devices]
+  senior: [old age pension, senior citizen]
+  low_income: [housing, free ration, LPG, health insurance]
+  female: [women, mother, maternity]
+  sc_st: [SC, ST, scholarship, special assistance]

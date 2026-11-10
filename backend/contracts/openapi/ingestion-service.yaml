@@ -1,0 +1,200 @@
+openapi: 3.1.0
+info:
+  title: Haqdaar ingestion-service
+  version: 1.0.0
+  description: Contract is versioned by path prefix (/v1). Breaking changes require
+    /v2.
+servers:
+- url: http://localhost:8003
+paths:
+  /health:
+    get:
+      summary: Liveness
+      responses:
+        '200':
+          description: ok
+  /ready:
+    get:
+      summary: Readiness (dependencies reachable)
+      responses:
+        '200':
+          description: ready
+        '503':
+          description: not ready
+  /v1/ingest:
+    post:
+      summary: Start an ingestion run
+      operationId: post_v1_ingest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngestRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestStatus'
+        '422':
+          description: Validation error
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/ingest/status:
+    get:
+      summary: Ingestion progress
+      operationId: get_v1_ingest_status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestStatus'
+        '422':
+          description: Validation error
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/docs/{scheme_id}:
+    delete:
+      summary: Remove a scheme's chunks
+      operationId: delete_v1_docs_scheme_id
+      parameters:
+      - name: scheme_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteDocResponse'
+        '422':
+          description: Validation error
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorResponse
+      type: object
+    IngestRequest:
+      properties:
+        path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Path
+        force:
+          default: false
+          title: Force
+          type: boolean
+      title: IngestRequest
+      type: object
+    FileError:
+      properties:
+        file:
+          title: File
+          type: string
+        error:
+          title: Error
+          type: string
+      required:
+      - file
+      - error
+      title: FileError
+      type: object
+    IngestStatus:
+      properties:
+        state:
+          default: idle
+          enum:
+          - idle
+          - running
+          - done
+          - error
+          title: State
+          type: string
+        started_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Started At
+        finished_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Finished At
+        files_total:
+          default: 0
+          title: Files Total
+          type: integer
+        files_processed:
+          default: 0
+          title: Files Processed
+          type: integer
+        files_unchanged:
+          default: 0
+          title: Files Unchanged
+          type: integer
+        chunks_added:
+          default: 0
+          title: Chunks Added
+          type: integer
+        chunks_deleted:
+          default: 0
+          title: Chunks Deleted
+          type: integer
+        collection:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Collection
+        errors:
+          default: []
+          items:
+            $ref: '#/components/schemas/FileError'
+          title: Errors
+          type: array
+      title: IngestStatus
+      type: object
+    DeleteDocResponse:
+      properties:
+        scheme_id:
+          title: Scheme Id
+          type: string
+        chunks_deleted:
+          title: Chunks Deleted
+          type: integer
+      required:
+      - scheme_id
+      - chunks_deleted
+      title: DeleteDocResponse
+      type: object

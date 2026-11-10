@@ -1,0 +1,47 @@
+{
+  "properties": {
+    "scheme_id": {
+      "title": "Scheme Id",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "eligible",
+        "ineligible",
+        "unknown"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "score": {
+      "default": 0.0,
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Score",
+      "type": "number"
+    },
+    "reasons": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Reasons",
+      "type": "array"
+    },
+    "missing_fields": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Missing Fields",
+      "type": "array"
+    }
+  },
+  "required": [
+    "scheme_id",
+    "status"
+  ],
+  "title": "EligibilityResult",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

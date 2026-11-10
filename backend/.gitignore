@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.env
+qdrant_storage/
+*.egg-info/
+eval/results/*.json
+!eval/results/baseline*.json

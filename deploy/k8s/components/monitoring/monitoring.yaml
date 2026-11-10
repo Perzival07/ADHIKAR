@@ -1,0 +1,154 @@
+# Requires the Prometheus Operator (kube-prometheus-stack). Alert thresholds are starting points; tune to your SLOs.
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: recommendation-service
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: recommendation-service
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
+    bearerTokenSecret:
+      name: reco-secrets
+      key: RECO_METRICS_TOKEN
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: auth-service
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: auth-service
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: eligibility-service
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: eligibility-service
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: retrieval-service
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: retrieval-service
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: embedding-service
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: embedding-service
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: llm-gateway
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: llm-gateway
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: haqdaar-alerts
+  labels:
+    release: prometheus
+spec:
+  groups:
+  - name: haqdaar.slo
+    rules:
+    - alert: HaqdaarApiErrorRateHigh
+      for: 10m
+      labels:
+        severity: page
+      expr: sum(rate(haqdaar_http_requests_total{service=~"recommendation-service|auth-service",status=~"5.."}[5m])) / sum(rate(haqdaar_http_requests_total{service=~"recommendation-service|auth-service"}[5m]))
+        > 0.02
+      annotations:
+        summary: More than 2% of public API requests fail with 5xx
+    - alert: HaqdaarRecommendationLatencyHigh
+      for: 15m
+      labels:
+        severity: ticket
+      expr: histogram_quantile(0.95, sum by (le) (rate(haqdaar_http_request_duration_seconds_bucket{route="/v1/recommendations"}[5m])))
+        > 20
+      annotations:
+        summary: p95 recommendation latency above 20 s (LLM saturated? add model servers)
+    - alert: HaqdaarRulesOnlyFallbackHigh
+      for: 15m
+      labels:
+        severity: ticket
+      expr: sum(rate(reco_fallback_total[10m])) / sum(rate(reco_requests_total[10m])) > 0.25
+      annotations:
+        summary: 'Over 25% of answers are rules-only: LLM or retrieval degraded'
+    - alert: HaqdaarCircuitOpen
+      for: 0m
+      labels:
+        severity: ticket
+      expr: increase(reco_circuit_open_total[5m]) > 0
+      annotations:
+        summary: A downstream dependency tripped its circuit breaker
+    - alert: HaqdaarLlmQueueRejections
+      for: 10m
+      labels:
+        severity: ticket
+      expr: sum(rate(llmgw_queue_rejections_total[5m])) > 0.5
+      annotations:
+        summary: 'LLM gateway is shedding load: scale model servers'
+    - alert: HaqdaarIngestFailed
+      for: 0m
+      labels:
+        severity: ticket
+      expr: kube_job_status_failed{namespace="haqdaar",job_name=~"ingest.*"} > 0
+      annotations:
+        summary: Scheme document ingestion job failed

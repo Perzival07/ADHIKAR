@@ -1,0 +1,134 @@
+# Central scheme rules, ported from lib/core/services/scheme_engine.dart (switch cases).
+# Outcomes are tried in order; the first whose `when` matches wins. No match -> `default`
+# (ineligible when omitted). Score >= 0.5 <=> eligible.
+version: 1
+schemes:
+  pm_kisan:
+    outcomes:
+      - when: {all: [{is: isFarmer}, {gt: [landHoldingAcres, 0]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify because you own {landHoldingAcres} acres of agricultural land in {state} and actively practice farming."
+      - when: {all: [{is: isFarmer}, {eq: [landHoldingAcres, 0]}]}
+        status: unknown
+        score: 0.4
+        missing_fields: [landHoldingAcres]
+        reason: "PM-KISAN strictly requires land ownership records (Khatauni) in your name. Since you marked land as 0, verify tenancy status at your Tehsil."
+
+  ayushman_bharat:
+    outcomes:
+      - when: {gte: [age, 70]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify universally because you are {age} years old (Senior Citizens 70+ receive universal ₹5 Lakh cover regardless of income)."
+      - when: {any: [{is: hasBplOrAay}, {is: isLowIncome}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify because your household holds a {rationCard} card with annual income in the {annualIncomeRange} bracket."
+      - when: {in: [socialCategory, [SC, ST]]}
+        status: eligible
+        score: 0.85
+        reason: "High priority under SECC social category inclusion for {socialCategory} families."
+
+  pm_awas_gramin:
+    outcomes:
+      - when: {all: [{is: hasBplOrAay}, {is: isLowIncome}]}
+        status: eligible
+        score: 0.95
+        reason: "You qualify as an economically vulnerable rural household ({rationCard}) eligible for pucca housing grant under Awas+."
+
+  pm_ujjwala:
+    outcomes:
+      - when:
+          all:
+            - {eq: [gender, Female]}
+            - {gte: [age, 18]}
+            - {any: [{is: hasBplOrAay}, {in: [socialCategory, [SC, ST, OBC]]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as an adult woman ({age} years) from an eligible {socialCategory} household without active LPG."
+      - when: {all: [{eq: [gender, Male]}, {any: [{is: hasBplOrAay}, {is: isLowIncome}]}]}
+        status: eligible
+        score: 0.8
+        reason: "Note: Ujjwala connections are issued in the name of the adult female head of the household. Apply with the adult woman member of your family."
+
+  pm_vishwakarma:
+    outcomes:
+      - when: {all: [{is: isArtisan}, {gte: [age, 18]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a practicing artisan ({trade}) working with hand tools in {state}."
+
+  pm_svanidhi:
+    outcomes:
+      - when: {all: [{is: isStreetVendor}, {gte: [age, 18]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as an urban/peri-urban street vendor eligible for micro-credit working capital starting at ₹10,000."
+
+  atal_pension:
+    outcomes:
+      - when: {all: [{gte: [age, 18]}, {lte: [age, 40]}, {ne: [occupation, Salaried]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify because you are {age} years old (eligible entry 18-40) and work in the unorganized sector without paying income tax."
+
+  sukanya_samriddhi:
+    outcomes:
+      - when: {eq: [hasGirlChildUnder10, true]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as the parent/guardian of a girl child under 10 years of age for high-interest (8.2%) sovereign savings."
+
+  nsap_old_age_pension:
+    outcomes:
+      - when: {all: [{gte: [age, 60]}, {is: hasBplOrAay}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a senior citizen aged {age} from an economically deprived ({rationCard}) family."
+
+  nsap_widow_pension:
+    outcomes:
+      - when: {all: [{is: isWidow}, {gte: [age, 40]}, {any: [{is: hasBplOrAay}, {is: isLowIncome}]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a widowed woman aged {age} years (criteria: 40-79 yrs) from an economically vulnerable background."
+
+  nsap_disability_pension:
+    outcomes:
+      - when: {all: [{is: isDivyangjan}, {gte: [age, 18]}, {any: [{is: hasBplOrAay}, {is: isLowIncome}]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify because you have certified disability (40%+) and belong to an economically vulnerable household."
+
+  post_matric_scholarship:
+    outcomes:
+      - when: {all: [{is: isStudent}, {in: [socialCategory, [SC, ST, OBC]]}, {is: isLowIncome}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a {socialCategory} student pursuing {studentLevel} with annual family income under ₹2.5 Lakh."
+
+  mgnrega:
+    outcomes:
+      - when: {all: [{gte: [age, 18]}, {ne: [occupation, Salaried]}]}
+        status: eligible
+        score: 0.95
+        reason: "You are entitled to 100 days of legally guaranteed rural employment and wage protection in your Gram Panchayat."
+
+  pm_matru_vandana:
+    outcomes:
+      - when:
+          all:
+            - {eq: [gender, Female]}
+            - {gte: [age, 19]}
+            - {any: [{is: hasBplOrAay}, {in: [socialCategory, [SC, ST]]}, {is: isLowIncome}]}
+        status: eligible
+        score: 0.9
+        reason: "You qualify for maternity financial assistance (₹5,000 - ₹6,000) during pregnancy and post-natal care."
+
+  pm_suraksha_bima:
+    outcomes:
+      - when: {all: [{gte: [age, 18]}, {lte: [age, 70]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as an adult citizen aged {age} holding a bank account to get ₹2 Lakh accident protection for just ₹20/year."

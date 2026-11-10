@@ -1,0 +1,105 @@
+openapi: 3.1.0
+info:
+  title: Haqdaar embedding-service
+  version: 1.0.0
+  description: Contract is versioned by path prefix (/v1). Breaking changes require
+    /v2.
+servers:
+- url: http://localhost:8002
+paths:
+  /health:
+    get:
+      summary: Liveness
+      responses:
+        '200':
+          description: ok
+  /ready:
+    get:
+      summary: Readiness (dependencies reachable)
+      responses:
+        '200':
+          description: ready
+        '503':
+          description: not ready
+  /v1/embed:
+    post:
+      summary: Embed texts
+      operationId: post_v1_embed
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmbedRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmbedResponse'
+        '422':
+          description: Validation error
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorResponse
+      type: object
+    EmbedRequest:
+      properties:
+        texts:
+          items:
+            type: string
+          minItems: 1
+          title: Texts
+          type: array
+        kind:
+          default: document
+          enum:
+          - query
+          - document
+          title: Kind
+          type: string
+      required:
+      - texts
+      title: EmbedRequest
+      type: object
+    EmbedResponse:
+      properties:
+        vectors:
+          items:
+            items:
+              type: number
+            type: array
+          title: Vectors
+          type: array
+        dim:
+          title: Dim
+          type: integer
+        model_id:
+          title: Model Id
+          type: string
+        truncated:
+          default: []
+          items:
+            type: boolean
+          title: Truncated
+          type: array
+      required:
+      - vectors
+      - dim
+      - model_id
+      title: EmbedResponse
+      type: object

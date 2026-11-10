@@ -1,0 +1,224 @@
+openapi: 3.1.0
+info:
+  title: Haqdaar eligibility-service
+  version: 1.0.0
+  description: Contract is versioned by path prefix (/v1). Breaking changes require
+    /v2.
+servers:
+- url: http://localhost:8005
+paths:
+  /health:
+    get:
+      summary: Liveness
+      responses:
+        '200':
+          description: ok
+  /ready:
+    get:
+      summary: Readiness (dependencies reachable)
+      responses:
+        '200':
+          description: ready
+        '503':
+          description: not ready
+  /v1/eligibility:
+    post:
+      summary: Evaluate eligibility rules
+      operationId: post_v1_eligibility
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EligibilityRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EligibilityResponse'
+        '422':
+          description: Validation error
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorResponse
+      type: object
+    CitizenProfile:
+      additionalProperties: false
+      description: 'Mirrors CitizenProfile.toJson() in lib/core/models/citizen_profile.dart.
+
+
+        extra="forbid": the app must never send name/phone/email to the backend.'
+      properties:
+        state:
+          default: Uttar Pradesh
+          title: State
+          type: string
+        district:
+          default: ''
+          title: District
+          type: string
+        age:
+          default: 35
+          maximum: 120
+          minimum: 0
+          title: Age
+          type: integer
+        gender:
+          default: Male
+          enum:
+          - Male
+          - Female
+          - Other
+          title: Gender
+          type: string
+        maritalStatus:
+          default: Married
+          enum:
+          - Single
+          - Married
+          - Widow
+          - Divorced
+          title: Maritalstatus
+          type: string
+        occupation:
+          default: Citizen
+          title: Occupation
+          type: string
+        landHoldingAcres:
+          default: 0.0
+          minimum: 0
+          title: Landholdingacres
+          type: number
+        artisanTrade:
+          default: ''
+          title: Artisantrade
+          type: string
+        studentLevel:
+          default: None
+          enum:
+          - None
+          - School (1-10)
+          - Post-Matric (11-12/ITI)
+          - Higher Ed
+          title: Studentlevel
+          type: string
+        socialCategory:
+          default: General
+          enum:
+          - General
+          - OBC
+          - SC
+          - ST
+          - EWS
+          title: Socialcategory
+          type: string
+        rationCard:
+          default: None
+          enum:
+          - Antyodaya (AAY)
+          - BPL
+          - Priority (PHH)
+          - APL
+          - None
+          title: Rationcard
+          type: string
+        annualIncomeRange:
+          default: 1 - 2.5 Lakh
+          enum:
+          - < 1 Lakh
+          - 1 - 2.5 Lakh
+          - 2.5 - 5 Lakh
+          - '> 5 Lakh'
+          title: Annualincomerange
+          type: string
+        disabilityStatus:
+          default: None
+          enum:
+          - None
+          - < 40%
+          - 40%+ (Divyangjan)
+          title: Disabilitystatus
+          type: string
+        hasGirlChildUnder10:
+          default: false
+          title: Hasgirlchildunder10
+          type: boolean
+      title: CitizenProfile
+      type: object
+    EligibilityRequest:
+      properties:
+        profile:
+          $ref: '#/components/schemas/CitizenProfile'
+        scheme_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          title: Scheme Ids
+      required:
+      - profile
+      title: EligibilityRequest
+      type: object
+    EligibilityResult:
+      properties:
+        scheme_id:
+          title: Scheme Id
+          type: string
+        status:
+          enum:
+          - eligible
+          - ineligible
+          - unknown
+          title: Status
+          type: string
+        score:
+          default: 0.0
+          maximum: 1
+          minimum: 0
+          title: Score
+          type: number
+        reasons:
+          default: []
+          items:
+            type: string
+          title: Reasons
+          type: array
+        missing_fields:
+          default: []
+          items:
+            type: string
+          title: Missing Fields
+          type: array
+      required:
+      - scheme_id
+      - status
+      title: EligibilityResult
+      type: object
+    EligibilityResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/EligibilityResult'
+          title: Results
+          type: array
+      required:
+      - results
+      title: EligibilityResponse
+      type: object

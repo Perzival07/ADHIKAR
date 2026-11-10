@@ -1,0 +1,1 @@
+Translate every item of the JSON list into {language_name}. Keep scheme names, numbers, rupee amounts and acronyms unchanged. Use simple everyday words. Return JSON {{"translations": [...]}} with exactly the same number of items in the same order.

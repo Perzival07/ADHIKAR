@@ -1,0 +1,60 @@
+# Production. Secrets are NOT generated here: create auth-secrets, reco-secrets and haqdaar-shared out of band (External Secrets / Sealed Secrets / your cloud secret manager). See secrets.example.env. CI pins image tags.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: haqdaar
+resources:
+- ../../base
+components:
+- ../../components/monitoring
+configMapGenerator:
+- name: haqdaar-config
+  behavior: merge
+  literals:
+  - AUTH_CORS_ORIGINS=https://app.haqdaar.example
+  - RECO_CORS_ORIGINS=https://app.haqdaar.example
+images:
+- name: ghcr.io/haqdaar/auth-service
+  newTag: 1.0.0
+- name: ghcr.io/haqdaar/recommendation-service
+  newTag: 1.0.0
+- name: ghcr.io/haqdaar/eligibility-service
+  newTag: 1.0.0
+- name: ghcr.io/haqdaar/retrieval-service
+  newTag: 1.0.0
+- name: ghcr.io/haqdaar/embedding-service
+  newTag: 1.0.0
+- name: ghcr.io/haqdaar/llm-gateway
+  newTag: 1.0.0
+- name: ghcr.io/haqdaar/ingestion-service
+  newTag: 1.0.0
+- name: ghcr.io/haqdaar/scheme-docs
+  newTag: 1.0.0
+patches:
+- target:
+    kind: HorizontalPodAutoscaler
+    name: recommendation-service
+  patch: "- op: replace\n  path: /spec/minReplicas\n  value: 3\n- op: replace\n  path: /spec/maxReplicas\n  value: 50\n"
+- target:
+    kind: HorizontalPodAutoscaler
+    name: auth-service
+  patch: "- op: replace\n  path: /spec/minReplicas\n  value: 3\n- op: replace\n  path: /spec/maxReplicas\n  value: 20\n"
+- target:
+    kind: HorizontalPodAutoscaler
+    name: eligibility-service
+  patch: "- op: replace\n  path: /spec/minReplicas\n  value: 2\n- op: replace\n  path: /spec/maxReplicas\n  value: 20\n"
+- target:
+    kind: HorizontalPodAutoscaler
+    name: retrieval-service
+  patch: "- op: replace\n  path: /spec/minReplicas\n  value: 2\n- op: replace\n  path: /spec/maxReplicas\n  value: 20\n"
+- target:
+    kind: HorizontalPodAutoscaler
+    name: embedding-service
+  patch: "- op: replace\n  path: /spec/minReplicas\n  value: 2\n- op: replace\n  path: /spec/maxReplicas\n  value: 12\n"
+- target:
+    kind: Deployment
+    labelSelector: app.kubernetes.io/component=backend
+  patch: "- op: replace\n  path: /spec/template/spec/topologySpreadConstraints/0/topologyKey\n  value: topology.kubernetes.io/zone\n"
+- target:
+    kind: Ingress
+    name: haqdaar-api
+  patch: "- op: add\n  path: /metadata/annotations/cert-manager.io~1cluster-issuer\n  value: letsencrypt-prod\n"

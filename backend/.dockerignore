@@ -1,0 +1,10 @@
+.venv
+.tools
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+**/*.egg-info
+**/.env
+**/auth-dev.db
+eval/results
+tests_e2e

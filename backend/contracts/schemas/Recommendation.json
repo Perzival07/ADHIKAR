@@ -1,0 +1,97 @@
+{
+  "$defs": {
+    "Citation": {
+      "properties": {
+        "chunk_id": {
+          "title": "Chunk Id",
+          "type": "string"
+        },
+        "quote": {
+          "default": "",
+          "title": "Quote",
+          "type": "string"
+        },
+        "section": {
+          "default": "",
+          "title": "Section",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "chunk_id"
+      ],
+      "title": "Citation",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "scheme_id": {
+      "title": "Scheme Id",
+      "type": "string"
+    },
+    "name": {
+      "default": "",
+      "title": "Name",
+      "type": "string"
+    },
+    "rank": {
+      "minimum": 1,
+      "title": "Rank",
+      "type": "integer"
+    },
+    "confidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    },
+    "reason_language": {
+      "default": "en",
+      "title": "Reason Language",
+      "type": "string"
+    },
+    "citations": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Citation"
+      },
+      "title": "Citations",
+      "type": "array"
+    },
+    "missing_info": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Missing Info",
+      "type": "array"
+    },
+    "eligibility_status": {
+      "default": "eligible",
+      "enum": [
+        "eligible",
+        "unknown"
+      ],
+      "title": "Eligibility Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "scheme_id",
+    "rank",
+    "confidence",
+    "reason"
+  ],
+  "title": "Recommendation",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

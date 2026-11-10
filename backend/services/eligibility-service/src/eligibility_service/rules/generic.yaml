@@ -1,0 +1,163 @@
+# Generic rules for every scheme without a dedicated rule (ported from the `default:` branch of
+# SchemeEngine.evaluate). Rules run in order; the first whose `when` matches decides. A rule without
+# `when` always matches (used as the final fallback).
+version: 1
+rules:
+  - id: expired
+    when: {any: [{scheme_flag: is_expired}, {scheme_contains: [application_status, expired]}]}
+    status: ineligible
+    score: 0.0
+    reason: "This scheme has expired or been superseded."
+
+  - id: farming_scheme_needs_farmer
+    when:
+      all:
+        - any:
+            - {scheme_contains: [category, agriculture]}
+            - {scheme_contains: [category, farmer]}
+            - {scheme_contains: [name, kisan]}
+            - {scheme_contains: [name, farmer]}
+            - {scheme_contains: [id, kisan]}
+            - {scheme_contains: [id, farmer]}
+            - {scheme_contains: [summary, farmer families]}
+            - {scheme_contains: [default_reason, farming]}
+            - {scheme_contains: [default_reason, farmer]}
+        - not: {is: isFarmer}
+    status: ineligible
+    score: 0.0
+    reason: "This scheme is for farmers."
+
+  - id: student_scheme_needs_student
+    when:
+      all:
+        - any:
+            - {scheme_contains: [category, scholarship]}
+            - {scheme_contains: [category, education]}
+            - {scheme_contains: [name, scholarship]}
+            - {scheme_contains: [name, fellowship]}
+            - {scheme_contains: [id, scholarship]}
+            - {scheme_contains: [id, fellowship]}
+            - {scheme_contains: [id, vidyarthi]}
+        - not: {is: isStudent}
+    status: ineligible
+    score: 0.0
+    reason: "This scheme is for students."
+
+  - id: artisan_scheme_needs_artisan
+    when:
+      all:
+        - any:
+            - {scheme_contains: [category, artisan]}
+            - {scheme_contains: [category, handicraft]}
+            - {scheme_contains: [name, vishwakarma]}
+            - {scheme_contains: [id, vishwakarma]}
+        - not: {is: isArtisan}
+    status: ineligible
+    score: 0.0
+    reason: "This scheme is for artisans and craftspeople."
+
+  - id: street_vendor_scheme_needs_vendor
+    when:
+      all:
+        - any:
+            - {scheme_contains: [id, svanidhi]}
+            - {scheme_contains: [name, svanidhi]}
+            - {scheme_contains: [name, street vendor]}
+        - not: {is: isStreetVendor}
+    status: ineligible
+    score: 0.0
+    reason: "This scheme is for street vendors."
+
+  - id: disability_scheme_needs_disability
+    when:
+      all:
+        - any:
+            - {scheme_contains: [category, disability]}
+            - {scheme_contains: [category, divyangjan]}
+            - {scheme_contains: [name, divyang]}
+            - {scheme_contains: [id, disability]}
+        - {eq: [disabilityStatus, None]}
+    status: ineligible
+    score: 0.0
+    reason: "This scheme is for persons with disabilities."
+
+  - id: salaried_excluded_from_unemployment_and_wage_schemes
+    when:
+      all:
+        - {is: isSalaried}
+        - any:
+            - {scheme_contains: [category, unemployment]}
+            - {scheme_contains: [id, yuva_sathi]}
+            - {scheme_contains: [id, yuva_nidhi]}
+            - {scheme_contains: [id, yuva_shakti]}
+            - {scheme_contains: [id, mgnrega]}
+    status: ineligible
+    score: 0.0
+    reason: "Salaried employees are not eligible for unemployment or daily-wage assistance."
+
+  - id: region_not_applicable
+    when:
+      not:
+        any:
+          - {scheme_flag: is_central}
+          - {scheme_eq: [state_scope, All]}
+          - {eq: [state, All India]}
+          - {same_state: true}
+    status: ineligible
+    score: 0.0
+    reason: "This scheme is not available in {state}."
+
+  - id: gender_not_eligible
+    when: {gender_mismatch: true}
+    status: ineligible
+    score: 0.0
+    reason: "This scheme is restricted by gender."
+
+  - id: age_out_of_range
+    when: {age_outside_range: true}
+    status: ineligible
+    score: 0.0
+    reason: "Your age is outside this scheme's age limits."
+
+  - id: income_above_1_lakh
+    when:
+      all:
+        - {scheme_eq: [income_ceiling, "< 1 Lakh"]}
+        - {not: {is: isLowIncome}}
+        - {not: {is: hasBplOrAay}}
+    status: ineligible
+    score: 0.0
+    reason: "Your family income is above this scheme's ceiling."
+
+  - id: income_above_2_5_lakh
+    when:
+      all:
+        - {scheme_eq: [income_ceiling, "< 2.5 Lakh"]}
+        - {in: [annualIncomeRange, ["> 5 Lakh", "2.5 - 5 Lakh"]]}
+        - {not: {is: hasBplOrAay}}
+    status: ineligible
+    score: 0.0
+    reason: "Your family income is above this scheme's ceiling."
+
+  - id: academic_scheme_for_non_student_over_30
+    when: {all: [{scheme_ne: [education_level, All]}, {not: {is: isStudent}}, {gt: [age, 30]}]}
+    status: ineligible
+    score: 0.3
+    reason: "This is an academic scheme and you are not a student."
+
+  - id: state_resident_match
+    when: {all: [{same_state: true}, {ne: [state, All India]}]}
+    status: eligible
+    score: 0.95
+    reason: "You qualify as a resident of {state} for this flagship state entitlement ({scheme.category})."
+
+  - id: central_scheme_match
+    when: {scheme_flag: is_central}
+    status: eligible
+    score: 0.85
+    reason: "{scheme.default_reason}"
+
+  - id: other_state_scheme_match
+    status: eligible
+    score: 0.75
+    reason: "Flagship state welfare scheme under {scheme.state_scope} jurisdiction."

@@ -1,0 +1,71 @@
+# Edge cases: union territories, boundary ages, other languages, multiple disadvantages.
+- id: ut_chandigarh
+  profile: {state: Chandigarh, age: 35}
+  must_include: [atal_pension]
+  must_not_include: [mh_ladki_bahin, wb_annapurna_bhandar]
+
+- id: ut_jammu_kashmir_widow
+  profile: {state: Jammu and Kashmir, gender: Female, maritalStatus: Widow, age: 55, rationCard: BPL, annualIncomeRange: "< 1 Lakh"}
+  must_include: [ayushman_bharat]
+  must_not_include: [mh_ladki_bahin]
+
+- id: ut_ladakh_farmer
+  profile: {state: Ladakh, occupation: Farmer, landHoldingAcres: 1.0, age: 48}
+  must_include: [pm_kisan]
+  must_not_include: [od_kalia_scheme]
+
+- id: ut_puducherry_senior
+  profile: {state: Puducherry, age: 74}
+  must_include: [ayushman_bharat]
+
+- id: ut_lakshadweep_student
+  profile: {state: Lakshadweep, occupation: Student, studentLevel: Higher Ed, socialCategory: ST, annualIncomeRange: "< 1 Lakh", age: 20}
+  must_include: [ayushman_bharat]
+
+- id: boundary_age_18
+  profile: {state: Uttar Pradesh, age: 18, gender: Female, annualIncomeRange: "< 1 Lakh"}
+  must_include: [atal_pension]
+
+- id: boundary_age_70
+  profile: {state: Uttar Pradesh, age: 70}
+  must_include: [ayushman_bharat]
+
+- id: boundary_age_71
+  notes: Atal Pension entry age is 18-40, so 71 is out of range
+  profile: {state: Uttar Pradesh, age: 71}
+  must_include: [ayushman_bharat]
+  must_not_include: [atal_pension]
+
+- id: multiple_disadvantages
+  notes: Widow, senior, disabled, BPL -> many pensions
+  profile: {state: Bihar, gender: Female, maritalStatus: Widow, age: 65, disabilityStatus: "40%+ (Divyangjan)", rationCard: Antyodaya (AAY), annualIncomeRange: "< 1 Lakh"}
+  must_include: [br_vridhjan_pension, nsap_old_age_pension, ayushman_bharat]
+
+- id: hindi_request_farmer
+  notes: Reasons should be written in Hindi
+  language: hi
+  profile: {state: Uttar Pradesh, occupation: Farmer, landHoldingAcres: 2.0, age: 40}
+  must_include: [pm_kisan]
+  expect: {reason_language: hi}
+
+- id: hindi_request_woman_mh
+  language: hi
+  profile: {state: Maharashtra, gender: Female, age: 30, annualIncomeRange: "< 1 Lakh"}
+  must_include: [mh_ladki_bahin]
+  expect: {reason_language: hi}
+
+- id: tamil_request_pivot
+  notes: Tamil is a pivot language (generated in English, then translated)
+  language: ta
+  profile: {state: Tamil Nadu, gender: Female, age: 30, annualIncomeRange: "< 1 Lakh"}
+  must_include: [tn_magalir_urimai]
+
+- id: no_documents_state_unlisted
+  notes: A plain profile with defaults must still return something sensible
+  profile: {}
+  must_include: [atal_pension]
+
+- id: top_n_1
+  top_n: 1
+  profile: {state: Uttar Pradesh, occupation: Farmer, landHoldingAcres: 2.0, age: 40}
+  must_include: [pm_kisan]

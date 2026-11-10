@@ -1,0 +1,95 @@
+# Tag a release (git tag v1.2.3 && git push --tags): build, scan and publish every image, then emit the
+# prod manifests pinned to that version. Deploying them is a separate, approved step (environment: production).
+name: release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write      # keyless signing / provenance
+  attestations: write
+
+env:
+  REGISTRY: ghcr.io/${{ github.repository_owner }}
+
+jobs:
+  images:
+    name: image ${{ matrix.service }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - {service: recommendation-service, module: recommendation_service.main:app_factory, port: "8000"}
+          - {service: llm-gateway, module: llm_gateway.main:app_factory, port: "8001"}
+          - {service: embedding-service, module: embedding_service.main:app_factory, port: "8002"}
+          - {service: ingestion-service, module: ingestion_service.main:app_factory, port: "8003"}
+          - {service: retrieval-service, module: retrieval_service.main:app_factory, port: "8004"}
+          - {service: eligibility-service, module: eligibility_service.main:app_factory, port: "8005"}
+          - {service: auth-service, module: auth_service.main:app_factory, port: "8006"}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with: {registry: ghcr.io, username: "${{ github.actor }}", password: "${{ secrets.GITHUB_TOKEN }}"}
+      - id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: backend
+          file: backend/docker/service.Dockerfile
+          build-args: |
+            SERVICE=${{ matrix.service }}
+            APP_MODULE=${{ matrix.module }}
+            PORT=${{ matrix.port }}
+            VERSION=${{ github.ref_name }}
+          tags: ${{ env.REGISTRY }}/${{ matrix.service }}:${{ github.ref_name }}
+          push: true
+          provenance: true
+          sbom: true
+          cache-from: type=gha,scope=${{ matrix.service }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
+      - name: Vulnerability scan (fail on fixable critical/high)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ matrix.service }}:${{ github.ref_name }}
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: "1"
+      - uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ matrix.service }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
+
+  scheme-docs:
+    name: image scheme-docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with: {registry: ghcr.io, username: "${{ github.actor }}", password: "${{ secrets.GITHUB_TOKEN }}"}
+      - uses: docker/build-push-action@v6
+        with:
+          context: backend
+          file: backend/docker/scheme-docs.Dockerfile
+          tags: ${{ env.REGISTRY }}/scheme-docs:${{ github.ref_name }}
+          push: true
+
+  manifests:
+    name: prod manifests pinned to ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    needs: [images, scheme-docs]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pin image tags
+        working-directory: deploy/k8s/overlays/prod
+        run: |
+          for s in auth-service recommendation-service eligibility-service retrieval-service embedding-service llm-gateway ingestion-service scheme-docs; do
+            kustomize edit set image "ghcr.io/haqdaar/$s=${REGISTRY}/$s:${GITHUB_REF_NAME}"
+          done
+      - run: kubectl kustomize deploy/k8s/overlays/prod > haqdaar-${{ github.ref_name }}.yaml
+      - uses: actions/upload-artifact@v4
+        with: {name: "manifests-${{ github.ref_name }}", path: "haqdaar-${{ github.ref_name }}.yaml"}

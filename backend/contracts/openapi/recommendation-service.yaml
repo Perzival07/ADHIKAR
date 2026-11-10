@@ -1,0 +1,400 @@
+openapi: 3.1.0
+info:
+  title: Haqdaar recommendation-service (public API)
+  version: 1.0.0
+  description: Contract is versioned by path prefix (/v1). Breaking changes require
+    /v2.
+servers:
+- url: http://localhost:8000
+paths:
+  /health:
+    get:
+      summary: Liveness
+      responses:
+        '200':
+          description: ok
+  /ready:
+    get:
+      summary: Readiness (dependencies reachable)
+      responses:
+        '200':
+          description: ready
+        '503':
+          description: not ready
+  /v1/recommendations:
+    post:
+      summary: Recommend schemes for a profile
+      operationId: post_v1_recommendations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecommendationRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecommendationResponse'
+        '422':
+          description: Validation error
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/explain:
+    post:
+      summary: Explain one scheme for a profile (detail screen)
+      operationId: post_v1_explain
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExplainRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExplainResponse'
+        '422':
+          description: Validation error
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorResponse
+      type: object
+    CitizenProfile:
+      additionalProperties: false
+      description: 'Mirrors CitizenProfile.toJson() in lib/core/models/citizen_profile.dart.
+
+
+        extra="forbid": the app must never send name/phone/email to the backend.'
+      properties:
+        state:
+          default: Uttar Pradesh
+          title: State
+          type: string
+        district:
+          default: ''
+          title: District
+          type: string
+        age:
+          default: 35
+          maximum: 120
+          minimum: 0
+          title: Age
+          type: integer
+        gender:
+          default: Male
+          enum:
+          - Male
+          - Female
+          - Other
+          title: Gender
+          type: string
+        maritalStatus:
+          default: Married
+          enum:
+          - Single
+          - Married
+          - Widow
+          - Divorced
+          title: Maritalstatus
+          type: string
+        occupation:
+          default: Citizen
+          title: Occupation
+          type: string
+        landHoldingAcres:
+          default: 0.0
+          minimum: 0
+          title: Landholdingacres
+          type: number
+        artisanTrade:
+          default: ''
+          title: Artisantrade
+          type: string
+        studentLevel:
+          default: None
+          enum:
+          - None
+          - School (1-10)
+          - Post-Matric (11-12/ITI)
+          - Higher Ed
+          title: Studentlevel
+          type: string
+        socialCategory:
+          default: General
+          enum:
+          - General
+          - OBC
+          - SC
+          - ST
+          - EWS
+          title: Socialcategory
+          type: string
+        rationCard:
+          default: None
+          enum:
+          - Antyodaya (AAY)
+          - BPL
+          - Priority (PHH)
+          - APL
+          - None
+          title: Rationcard
+          type: string
+        annualIncomeRange:
+          default: 1 - 2.5 Lakh
+          enum:
+          - < 1 Lakh
+          - 1 - 2.5 Lakh
+          - 2.5 - 5 Lakh
+          - '> 5 Lakh'
+          title: Annualincomerange
+          type: string
+        disabilityStatus:
+          default: None
+          enum:
+          - None
+          - < 40%
+          - 40%+ (Divyangjan)
+          title: Disabilitystatus
+          type: string
+        hasGirlChildUnder10:
+          default: false
+          title: Hasgirlchildunder10
+          type: boolean
+      title: CitizenProfile
+      type: object
+    RecommendationRequest:
+      properties:
+        profile:
+          $ref: '#/components/schemas/CitizenProfile'
+        language:
+          default: en
+          title: Language
+          type: string
+        top_n:
+          default: 5
+          maximum: 20
+          minimum: 1
+          title: Top N
+          type: integer
+        include_citations:
+          default: true
+          title: Include Citations
+          type: boolean
+      required:
+      - profile
+      title: RecommendationRequest
+      type: object
+    Citation:
+      properties:
+        chunk_id:
+          title: Chunk Id
+          type: string
+        quote:
+          default: ''
+          title: Quote
+          type: string
+        section:
+          default: ''
+          title: Section
+          type: string
+        url:
+          default: ''
+          title: Url
+          type: string
+      required:
+      - chunk_id
+      title: Citation
+      type: object
+    Recommendation:
+      properties:
+        scheme_id:
+          title: Scheme Id
+          type: string
+        name:
+          default: ''
+          title: Name
+          type: string
+        rank:
+          minimum: 1
+          title: Rank
+          type: integer
+        confidence:
+          maximum: 1
+          minimum: 0
+          title: Confidence
+          type: number
+        reason:
+          title: Reason
+          type: string
+        reason_language:
+          default: en
+          title: Reason Language
+          type: string
+        citations:
+          default: []
+          items:
+            $ref: '#/components/schemas/Citation'
+          title: Citations
+          type: array
+        missing_info:
+          default: []
+          items:
+            type: string
+          title: Missing Info
+          type: array
+        eligibility_status:
+          default: eligible
+          enum:
+          - eligible
+          - unknown
+          title: Eligibility Status
+          type: string
+      required:
+      - scheme_id
+      - rank
+      - confidence
+      - reason
+      title: Recommendation
+      type: object
+    RecommendationResponse:
+      properties:
+        recommendations:
+          items:
+            $ref: '#/components/schemas/Recommendation'
+          title: Recommendations
+          type: array
+        more:
+          default: []
+          items:
+            $ref: '#/components/schemas/Recommendation'
+          title: More
+          type: array
+        mode:
+          enum:
+          - rag
+          - rules_only
+          title: Mode
+          type: string
+        trace_id:
+          title: Trace Id
+          type: string
+        fallback_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Fallback Reason
+      required:
+      - recommendations
+      - mode
+      - trace_id
+      title: RecommendationResponse
+      type: object
+    ExplainRequest:
+      properties:
+        profile:
+          $ref: '#/components/schemas/CitizenProfile'
+        scheme_id:
+          minLength: 1
+          title: Scheme Id
+          type: string
+        language:
+          default: en
+          title: Language
+          type: string
+      required:
+      - profile
+      - scheme_id
+      title: ExplainRequest
+      type: object
+    ExplainResponse:
+      properties:
+        scheme_id:
+          title: Scheme Id
+          type: string
+        name:
+          default: ''
+          title: Name
+          type: string
+        eligibility_status:
+          enum:
+          - eligible
+          - ineligible
+          - unknown
+          title: Eligibility Status
+          type: string
+        eligibility_reason:
+          default: ''
+          title: Eligibility Reason
+          type: string
+        explanation:
+          title: Explanation
+          type: string
+        documents_required:
+          default: []
+          items:
+            type: string
+          title: Documents Required
+          type: array
+        how_to_apply:
+          default: []
+          items:
+            type: string
+          title: How To Apply
+          type: array
+        citations:
+          default: []
+          items:
+            $ref: '#/components/schemas/Citation'
+          title: Citations
+          type: array
+        reason_language:
+          default: en
+          title: Reason Language
+          type: string
+        mode:
+          enum:
+          - rag
+          - rules_only
+          title: Mode
+          type: string
+        trace_id:
+          title: Trace Id
+          type: string
+        fallback_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Fallback Reason
+      required:
+      - scheme_id
+      - eligibility_status
+      - explanation
+      - mode
+      - trace_id
+      title: ExplainResponse
+      type: object

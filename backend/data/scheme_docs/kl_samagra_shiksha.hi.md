@@ -1,0 +1,62 @@
+---
+scheme_id: "kl_samagra_shiksha"
+name: "समग्र शिक्षा केरल योजना"
+state_scope: "Kerala"
+is_central: false
+category: "Education & Scholarships"
+gender_eligibility: "All"
+income_ceiling: "No Limit"
+min_age: 6
+max_age: 18
+education_level: "School"
+official_portal_url: "https://samagra.kite.kerala.gov.in"
+last_verified_date: "2025-2026 (samagra.kite.kerala.gov.in)"
+language: "hi"
+source_type: "corpus"
+status: "verified"
+application_status: "Open / Ongoing"
+deadline: "Ongoing"
+is_expired: false
+announced_date: null
+ministry: "General Education Department, Government of Kerala"
+department: "State Project Directorate, Samagra Shiksha Kerala, Thiruvananthapuram"
+---
+# समग्र शिक्षा केरल योजना
+
+## सारांश
+सरकारी स्कूलों के विद्यार्थियों के लिए मुफ्त स्कूल वर्दी, डिजिटल क्लासरूम और मेधावी छात्रवृत्ति।
+
+## लाभ
+मुफ्त पाठ्यपुस्तकें, स्कूल बैग, दो सेट वर्दी और ₹10,000 का मेधावी छात्र पुरस्कार।
+
+## पात्रता
+आप केरल के सरकारी विद्यालय के नियमित छात्र हैं।
+
+- क्षेत्र: Kerala
+- आयु: 6–18
+- आय सीमा: No Limit
+- शिक्षा स्तर: School
+- आवेदन स्थिति: Open / Ongoing (Ongoing)
+
+## आवश्यक दस्तावेज़
+- **स्कूल प्रवेश रिकॉर्ड** (School Headmaster): Enrolment record.
+- **निवास प्रमाण पत्र** (Village Officer): Eligibility proof.
+
+## आवेदन कैसे करें
+### स्कूल प्राचार्य कार्यालय (panchayat)
+Entitlements issued on admission.
+Link: https://samagra.kite.kerala.gov.in
+
+### समग्र काइट पोर्टल (online)
+Access digital learning repositories and interactive question banks.
+Link: https://samagra.kite.kerala.gov.in
+
+## सावधानियाँ
+Students must maintain 75% attendance in classes.
+
+## स्रोत
+आधिकारिक पोर्टल: https://samagra.kite.kerala.gov.in
+अंतिम सत्यापन: 2025-2026 (samagra.kite.kerala.gov.in)
+स्रोत: samagra.kite.kerala.gov.in; Samagra Shiksha Policy Guidelines, Education Dept, Govt of Kerala
+विभाग: State Project Directorate, Samagra Shiksha Kerala, Thiruvananthapuram
+समय-सीमा: Distributed annually at beginning of academic calendar

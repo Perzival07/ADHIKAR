@@ -1,0 +1,176 @@
+# Local / CI stack: mock LLM + hash embedder by default (no models needed).
+# Production runs on Kubernetes (deploy/k8s); this file mirrors that topology for development and e2e tests.
+# Only the two public APIs (recommendation-service, auth-service) publish host ports.
+name: haqdaar
+
+x-common: &common
+  restart: unless-stopped
+  networks: [internal]
+
+x-build: &build
+  context: .
+  dockerfile: docker/service.Dockerfile
+
+x-health: &health
+  interval: 10s
+  timeout: 3s
+  retries: 10
+  start_period: 10s
+
+services:
+  # ---------------------------------------------------------------- infrastructure
+  qdrant:
+    <<: *common
+    image: qdrant/qdrant:v1.15.0
+    volumes: [qdrant_storage:/qdrant/storage]
+    healthcheck:
+      <<: *health
+      test: ["CMD-SHELL", "bash -c ':> /dev/tcp/127.0.0.1/6333' || exit 1"]
+
+  redis:
+    <<: *common
+    image: redis:7.4-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    healthcheck:
+      <<: *health
+      test: ["CMD", "redis-cli", "ping"]
+
+  postgres:
+    <<: *common
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: auth
+      POSTGRES_USER: haqdaar
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-haqdaar-dev-only}
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    healthcheck:
+      <<: *health
+      test: ["CMD-SHELL", "pg_isready -U haqdaar -d auth"]
+
+  # ---------------------------------------------------------------- accounts
+  auth-migrate:
+    networks: [internal]
+    build: {<<: *build, args: {SERVICE: auth-service, APP_MODULE: "auth_service.main:app_factory", PORT: "8006"}}
+    image: haqdaar/auth-service:local
+    command: ["python", "-m", "auth_service", "migrate"]
+    environment: &auth_env
+      AUTH_ENV: development
+      AUTH_DATABASE_URL: postgresql+asyncpg://haqdaar:${POSTGRES_PASSWORD:-haqdaar-dev-only}@postgres:5432/auth
+      AUTH_REDIS_URL: redis://redis:6379/1
+      AUTH_EMAIL_BACKEND: console  # OTP codes appear in this service's log (development only)
+      AUTH_SEED_DEMO_USERS: "true"
+      AUTH_CORS_ORIGINS: "*"
+      AUTH_JWT_PRIVATE_KEY: ${AUTH_JWT_PRIVATE_KEY:-}
+    depends_on:
+      postgres: {condition: service_healthy}
+
+  auth-service:
+    <<: *common
+    image: haqdaar/auth-service:local
+    environment: *auth_env
+    ports: ["8006:8006"]
+    depends_on:
+      auth-migrate: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+    healthcheck:
+      <<: *health
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8006/health')"]
+
+  # ---------------------------------------------------------------- RAG pipeline
+  llm-gateway:
+    <<: *common
+    build: {<<: *build, args: {SERVICE: llm-gateway, APP_MODULE: "llm_gateway.main:app_factory", PORT: "8001"}}
+    image: haqdaar/llm-gateway:local
+    environment:
+      LLMGW_MODELS_FILE: /config/models.yaml
+      LLMGW_CONCURRENCY: "1"
+    volumes: [./services/llm-gateway/models.yaml:/config/models.yaml:ro]
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    healthcheck:
+      <<: *health
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8001/health')"]
+
+  embedding-service:
+    <<: *common
+    build: {<<: *build, args: {SERVICE: embedding-service, APP_MODULE: "embedding_service.main:app_factory", PORT: "8002"}}
+    image: haqdaar/embedding-service:local
+    environment:
+      EMBED_PROVIDER: ${EMBED_PROVIDER:-hash}
+    healthcheck:
+      <<: *health
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8002/health')"]
+
+  ingestion-service:
+    <<: *common
+    build: {<<: *build, args: {SERVICE: ingestion-service, APP_MODULE: "ingestion_service.main:app_factory", PORT: "8003"}}
+    image: haqdaar/ingestion-service:local
+    depends_on:
+      qdrant: {condition: service_healthy}
+      embedding-service: {condition: service_healthy}
+    environment:
+      INGEST_QDRANT_URL: http://qdrant:6333
+      INGEST_EMBEDDING_URL: http://embedding-service:8002
+      INGEST_DOCS_DIR: /data/scheme_docs
+      INGEST_STATE_DIR: /state
+    volumes: [./data/scheme_docs:/data/scheme_docs:ro, ingest_state:/state]
+    healthcheck:
+      <<: *health
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8003/health')"]
+
+  retrieval-service:
+    <<: *common
+    build: {<<: *build, args: {SERVICE: retrieval-service, APP_MODULE: "retrieval_service.main:app_factory", PORT: "8004"}}
+    image: haqdaar/retrieval-service:local
+    depends_on:
+      qdrant: {condition: service_healthy}
+      embedding-service: {condition: service_healthy}
+    environment:
+      RETRIEVAL_QDRANT_URL: http://qdrant:6333
+      RETRIEVAL_EMBEDDING_URL: http://embedding-service:8002
+    healthcheck:
+      <<: *health
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8004/health')"]
+
+  eligibility-service:
+    <<: *common
+    build: {<<: *build, args: {SERVICE: eligibility-service, APP_MODULE: "eligibility_service.main:app_factory", PORT: "8005"}}
+    image: haqdaar/eligibility-service:local
+    environment:
+      ELIG_DOCS_DIR: /data/scheme_docs
+    volumes: [./data/scheme_docs:/data/scheme_docs:ro]
+    healthcheck:
+      <<: *health
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8005/health')"]
+
+  recommendation-service:
+    <<: *common
+    build: {<<: *build, args: {SERVICE: recommendation-service, APP_MODULE: "recommendation_service.main:app_factory", PORT: "8000"}}
+    image: haqdaar/recommendation-service:local
+    depends_on:
+      eligibility-service: {condition: service_healthy}
+      retrieval-service: {condition: service_healthy}
+      llm-gateway: {condition: service_healthy}
+      auth-service: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    ports: ["8000:8000"]
+    environment:
+      RECO_ELIGIBILITY_URL: http://eligibility-service:8005
+      RECO_RETRIEVAL_URL: http://retrieval-service:8004
+      RECO_LLM_GATEWAY_URL: http://llm-gateway:8001
+      RECO_REDIS_URL: redis://redis:6379/0
+      RECO_AUTH_MODE: ${RECO_AUTH_MODE:-optional}
+      RECO_AUTH_JWKS_URL: http://auth-service:8006/.well-known/jwks.json
+      RECO_CORS_ORIGINS: ${RECO_CORS_ORIGINS:-*}
+      RECO_ADMIN_TOKEN: ${RECO_ADMIN_TOKEN:-}
+      RECO_TRUST_FORWARDED_FOR: ${RECO_TRUST_FORWARDED_FOR:-false}
+    healthcheck:
+      <<: *health
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/health')"]
+
+networks:
+  internal: {}
+
+volumes:
+  qdrant_storage: {}
+  ingest_state: {}
+  postgres_data: {}

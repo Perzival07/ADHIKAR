@@ -1,0 +1,113 @@
+{
+  "properties": {
+    "scheme_id": {
+      "title": "Scheme Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "state_scope": {
+      "default": "All",
+      "title": "State Scope",
+      "type": "string"
+    },
+    "is_central": {
+      "default": true,
+      "title": "Is Central",
+      "type": "boolean"
+    },
+    "category": {
+      "default": "",
+      "title": "Category",
+      "type": "string"
+    },
+    "gender_eligibility": {
+      "default": "All",
+      "enum": [
+        "All",
+        "Female",
+        "Male"
+      ],
+      "title": "Gender Eligibility",
+      "type": "string"
+    },
+    "income_ceiling": {
+      "default": "No Limit",
+      "title": "Income Ceiling",
+      "type": "string"
+    },
+    "min_age": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Min Age"
+    },
+    "max_age": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Max Age"
+    },
+    "education_level": {
+      "default": "All",
+      "title": "Education Level",
+      "type": "string"
+    },
+    "official_portal_url": {
+      "default": "",
+      "title": "Official Portal Url",
+      "type": "string"
+    },
+    "last_verified_date": {
+      "default": "",
+      "title": "Last Verified Date",
+      "type": "string"
+    },
+    "language": {
+      "default": "en",
+      "title": "Language",
+      "type": "string"
+    },
+    "source_type": {
+      "default": "corpus",
+      "enum": [
+        "corpus",
+        "pdf",
+        "web",
+        "manual"
+      ],
+      "title": "Source Type",
+      "type": "string"
+    },
+    "status": {
+      "default": "verified",
+      "enum": [
+        "verified",
+        "unverified"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "scheme_id",
+    "name"
+  ],
+  "title": "SchemeDocMeta",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

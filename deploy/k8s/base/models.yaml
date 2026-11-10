@@ -1,0 +1,29 @@
+# llm-gateway routing. Other services only ever use the ALIAS names below.
+# Switching the real model is an edit to this file only (no code changes).
+aliases:
+  default:
+    provider: mock
+  recommender:
+    provider: mock
+    fallback: []
+  translate:
+    provider: mock
+
+# ---- Example: local model through Ollama (set up on the PC, see plan P13) ----
+#  recommender:
+#    provider: ollama
+#    model: "<ollama model tag>"
+#    base_url: http://host.docker.internal:11434
+#    options: {num_ctx: 4096, keep_alive: "30m"}   # num_gpu is optional
+#    fallback: []                                   # e.g. [default] in dev only
+#
+# ---- Example: any OpenAI-compatible local server (llama.cpp / LM Studio / vLLM) ----
+#  recommender:
+#    provider: openai_compatible
+#    model: "<model name>"
+#    base_url: http://host.docker.internal:8080
+#    options: {supports_json_schema: false, max_context: 4096}
+#
+# ---- Extension point: cloud adapters (Claude, Gemini, ...) ----
+# Implement llm_gateway.providers.base.LLMProvider, register it in providers/__init__.py (REGISTRY),
+# then reference it here. Nothing outside llm-gateway changes.

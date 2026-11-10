@@ -1,0 +1,268 @@
+# State/UT scheme rules, ported from lib/core/services/scheme_engine.dart ("State Specific Evaluation Rules").
+version: 1
+schemes:
+  up_kanya_sumangala:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, Uttar Pradesh]}
+            - {any: [{eq: [hasGirlChildUnder10, true]}, {all: [{eq: [gender, Female]}, {lte: [age, 22]}]}]}
+            - {is: isLowIncome}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as an Uttar Pradesh resident for ₹25,000 cash milestones for girl child education and welfare."
+
+  up_abhyudaya:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, Uttar Pradesh]}
+            - {any: [{is: isStudent}, {all: [{gte: [age, 17]}, {lte: [age, 35]}]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as an Uttar Pradesh student/youth eligible for free competitive exam coaching (UPSC/UPPSC/JEE/NEET) & tablets."
+
+  mh_ladki_bahin:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, Maharashtra]}
+            - {eq: [gender, Female]}
+            - {gte: [age, 21]}
+            - {lte: [age, 65]}
+            - {any: [{is: isLowIncome}, {is: hasBplOrAay}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a woman aged {age} residing in Maharashtra with family income under ₹2.5 Lakh for ₹1,500/month DBT."
+
+  mh_namo_shetkari:
+    outcomes:
+      - when: {all: [{eq: [state, Maharashtra]}, {is: isFarmer}, {gt: [landHoldingAcres, 0]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a landholding farmer in Maharashtra to receive an additional ₹6,000/yr over PM-KISAN (total ₹12,000/yr)."
+
+  mp_ladli_behna:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, Madhya Pradesh]}
+            - {eq: [gender, Female]}
+            - {gte: [age, 21]}
+            - {lte: [age, 60]}
+            - {any: [{is: isLowIncome}, {is: hasBplOrAay}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a woman aged {age} in Madhya Pradesh for direct ₹1,250/month DBT under Ladli Behna Yojana."
+
+  bihar_kanya_utthan:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, Bihar]}
+            - {eq: [gender, Female]}
+            - {any: [{is: isStudent}, {lte: [age, 28]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a female student in Bihar for up to ₹50,000 graduation incentive or ₹25,000 intermediate incentive."
+
+  wb_annapurna_bhandar:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, West Bengal]}
+            - {eq: [gender, Female]}
+            - {gte: [age, 25]}
+            - {lte: [age, 60]}
+            - {ne: [occupation, Salaried]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a female resident of West Bengal aged {age} for ₹3,000/month DBT direct financial assistance and 100% free state bus travel."
+      - when: {all: [{eq: [state, West Bengal]}, {eq: [gender, Female]}, {lt: [age, 25]}]}
+        status: ineligible
+        score: 0.4
+        reason: "Annapurna Bhandar requires minimum age of 25 (your age: {age}). For women aged 21, you qualify for Banglar Yuva Sathi (₹1,500/mo), Bhagini Nivedita (₹50,000 grant), and Yuva Shakti."
+
+  wb_banglar_yuva_sathi:
+    outcomes:
+      - when: {all: [{eq: [state, West Bengal]}, {gte: [age, 21]}, {lte: [age, 40]}, {ne: [occupation, Salaried]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a permanent resident of West Bengal aged {age} (criteria: 21-40 years, min 10th pass) for ₹1,500/month DBT unemployment assistance for up to 5 years."
+
+  wb_bhagini_nivedita:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, West Bengal]}
+            - {eq: [gender, Female]}
+            - {any: [{is: isStudent}, {all: [{gte: [age, 17]}, {lte: [age, 25]}]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as an unmarried woman in West Bengal pursuing higher education for ₹50,000 total study grant (₹17,000 in Year 1, ₹17,000 in Year 2, and ₹16,000 in Year 3)."
+
+  wb_yuva_shakti:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, West Bengal]}
+            - {gte: [age, 21]}
+            - {lte: [age, 45]}
+            - {any: [{is: isLowIncome}, {is: hasBplOrAay}, {eq: [annualIncomeRange, "< 1 Lakh"]}]}
+            - {ne: [occupation, Salaried]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as an eligible unemployed youth in West Bengal aged {age} with family income under ₹1 Lakh for ₹2,000 - ₹3,000 monthly allowance under Yuva Shakti Bharosa Card."
+
+  wb_lakshmir_bhandar:
+    outcomes: []
+    default: {status: ineligible, score: 0.0, reason: "This scheme has been superseded and is no longer active."}
+
+  gj_vhali_dikri:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, Gujarat]}
+            - {any: [{eq: [hasGirlChildUnder10, true]}, {all: [{eq: [gender, Female]}, {lte: [age, 18]}]}]}
+            - {is: isLowIncome}
+        status: eligible
+        score: 1.0
+        reason: "You qualify in Gujarat for ₹1,10,000 total financial assistance for your daughter's education and future."
+
+  rj_maa_ayushman: &rajasthan
+    outcomes:
+      - when: {eq: [state, Rajasthan]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a resident of Rajasthan for universal cashless healthcare treatment up to ₹25 Lakh under Mukhyamantri Ayushman Arogya (MAA) Yojana."
+  rj_chiranjeevi: *rajasthan
+
+  or_subhadra:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, Odisha]}
+            - {eq: [gender, Female]}
+            - {gte: [age, 21]}
+            - {lte: [age, 60]}
+            - {any: [{is: isLowIncome}, {is: hasBplOrAay}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a woman residing in Odisha aged {age} (criteria: 21-60 years) for ₹10,000/year DBT under Subhadra Yojana."
+
+  ts_mahalakshmi:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, Telangana]}
+            - {eq: [gender, Female]}
+            - {gte: [age, 18]}
+            - {any: [{is: isLowIncome}, {is: hasBplOrAay}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as an adult woman residing in Telangana for ₹2,500/month DBT, free TSRTC bus travel, and ₹500 gas cylinder under Mahalakshmi Scheme."
+
+  cg_mahtari_vandan:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, Chhattisgarh]}
+            - {eq: [gender, Female]}
+            - {gte: [age, 21]}
+            - {lte: [age, 60]}
+            - {any: [{is: isLowIncome}, {is: hasBplOrAay}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a married woman aged {age} in Chhattisgarh for ₹1,000/month (₹12,000/year) DBT under Mahtari Vandan Yojana."
+
+  dl_mahila_samman:
+    outcomes:
+      - when:
+          all:
+            - {in: [state, [Delhi, "Delhi (NCT)"]]}
+            - {eq: [gender, Female]}
+            - {gte: [age, 18]}
+            - {ne: [occupation, Salaried]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as an adult resident woman in Delhi aged {age} for ₹1,000/month DBT under Mukhyamantri Mahila Samman Yojana."
+
+  as_orunodoi:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, Assam]}
+            - {eq: [gender, Female]}
+            - {gte: [age, 18]}
+            - {any: [{is: isLowIncome}, {is: hasBplOrAay}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a female resident in Assam for ₹1,250/month DBT under Orunodoi 3.0 Scheme."
+
+  ka_yuva_nidhi:
+    outcomes:
+      - when: {all: [{eq: [state, Karnataka]}, {gte: [age, 21]}, {lte: [age, 30]}, {ne: [occupation, Salaried]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as an unemployed degree/diploma holder in Karnataka aged {age} for ₹1,500 - ₹3,000/month allowance under Yuva Nidhi."
+
+  mh_yuva_karyaprashikshan:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, Maharashtra]}
+            - {gte: [age, 18]}
+            - {lte: [age, 35]}
+            - {any: [{is: isStudent}, {ne: [occupation, Salaried]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as an educated youth in Maharashtra aged {age} for ₹6,000 - ₹10,000/month internship stipend under Yuva Karya Prashikshan Yojana."
+
+  tn_magalir_urimai:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, Tamil Nadu]}
+            - {eq: [gender, Female]}
+            - {gte: [age, 21]}
+            - {any: [{is: isLowIncome}, {is: hasBplOrAay}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a woman family head in Tamil Nadu for ₹1,000/month basic income grant."
+
+  ka_gruha_lakshmi:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, Karnataka]}
+            - {eq: [gender, Female]}
+            - {gte: [age, 21]}
+            - {any: [{is: hasBplOrAay}, {is: isLowIncome}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as the female head of household in Karnataka for ₹2,000/month direct cash assistance."
+
+  or_kalia:
+    outcomes:
+      - when: {all: [{eq: [state, Odisha]}, {any: [{is: isFarmer}, {eq: [occupation, "Daily Wage / Laborer"]}]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a farmer or landless agricultural laborer in Odisha for ₹10,000 - ₹12,500 livelihood assistance."
+
+  pb_ashirwad:
+    outcomes:
+      - when:
+          all:
+            - {eq: [state, Punjab]}
+            - {any: [{in: [socialCategory, [SC, OBC]]}, {is: hasBplOrAay}]}
+            - {any: [{eq: [hasGirlChildUnder10, true]}, {all: [{eq: [gender, Female]}, {gte: [age, 18]}]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify in Punjab for ₹51,000 financial grant for daughter's marriage under the Ashirwad Scheme."
+
+  dl_vidyarthi_pratibha:
+    outcomes:
+      - when: {all: [{in: [state, [Delhi, "Delhi (NCT)"]]}, {is: isStudent}, {any: [{ne: [socialCategory, General]}, {is: isLowIncome}]}]}
+        status: eligible
+        score: 1.0
+        reason: "You qualify as a student in Delhi for ₹5,000 - ₹10,000 annual merit scholarship under Vidyarthi Pratibha Yojna."

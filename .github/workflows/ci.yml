@@ -1,0 +1,93 @@
+# Runs on every pull request and on pushes to main. All jobs must pass before merging.
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: backend (lint, unit, contracts, policies)
+    runs-on: ubuntu-latest
+    defaults: {run: {working-directory: backend}}
+    services:
+      postgres:  # real Postgres for the migration regression test
+        image: postgres:16-alpine
+        env: {POSTGRES_DB: authtest, POSTGRES_USER: tester, POSTGRES_PASSWORD: tester}
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U tester -d authtest" --health-interval 5s --health-timeout 3s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: make install
+      - run: make lint
+      - run: make test
+        env:
+          AUTH_TEST_POSTGRES_URL: postgresql+asyncpg://tester:tester@localhost:5432/authtest
+      - name: Contracts are up to date
+        run: |
+          .venv/bin/python contracts/generate.py --check
+          .venv/bin/python contracts/sync.py --check
+      - run: make audit
+
+  flutter:
+    name: flutter (analyze, test)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: {channel: stable, cache: true}
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+
+  manifests:
+    name: kubernetes manifests (render + validate)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dev secrets placeholders (rendering only)
+        run: |
+          mkdir -p deploy/k8s/overlays/dev/secrets
+          for f in auth reco shared postgres; do echo "PLACEHOLDER=1" > deploy/k8s/overlays/dev/secrets/$f.env; done
+      - name: Render overlays
+        run: |
+          mkdir -p rendered
+          for o in dev prod; do kubectl kustomize deploy/k8s/overlays/$o > rendered/$o.yaml; done
+      - name: Validate (strict, incl. CRDs)
+        run: |
+          docker run --rm -v "$PWD/rendered:/m:ro" ghcr.io/yannh/kubeconform:v0.6.7 -strict -summary \
+            -kubernetes-version 1.30.0 -schema-location default \
+            -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
+            /m/dev.yaml /m/prod.yaml
+
+  e2e:
+    name: end-to-end (docker compose)
+    runs-on: ubuntu-latest
+    needs: [backend]
+    defaults: {run: {working-directory: backend}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: make install
+      - run: make e2e
+      - name: Quality gate on the golden set (mock models)
+        run: .venv/bin/python -m eval run --target http://localhost:8000 --tag ci --min-recall10 0.95 --max-violation 0 --max-error 0
+      - name: Logs on failure
+        if: failure()
+        run: docker compose logs --no-color --tail=200
+      - if: always()
+        run: docker compose down -v
