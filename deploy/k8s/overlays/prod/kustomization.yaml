@@ -1,33 +1,33 @@
-# Production. Secrets are NOT generated here: create auth-secrets, reco-secrets and haqdaar-shared out of band (External Secrets / Sealed Secrets / your cloud secret manager). See secrets.example.env. CI pins image tags.
+# Production. Secrets are NOT generated here: create auth-secrets, reco-secrets and adhikar-shared out of band (External Secrets / Sealed Secrets / your cloud secret manager). See secrets.example.env. CI pins image tags.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: haqdaar
+namespace: adhikar
 resources:
 - ../../base
 components:
 - ../../components/monitoring
 configMapGenerator:
-- name: haqdaar-config
+- name: adhikar-config
   behavior: merge
   literals:
-  - AUTH_CORS_ORIGINS=https://app.haqdaar.example
-  - RECO_CORS_ORIGINS=https://app.haqdaar.example
+  - AUTH_CORS_ORIGINS=https://app.adhikar.example
+  - RECO_CORS_ORIGINS=https://app.adhikar.example
 images:
-- name: ghcr.io/haqdaar/auth-service
+- name: ghcr.io/adhikar/auth-service
   newTag: 1.0.0
-- name: ghcr.io/haqdaar/recommendation-service
+- name: ghcr.io/adhikar/recommendation-service
   newTag: 1.0.0
-- name: ghcr.io/haqdaar/eligibility-service
+- name: ghcr.io/adhikar/eligibility-service
   newTag: 1.0.0
-- name: ghcr.io/haqdaar/retrieval-service
+- name: ghcr.io/adhikar/retrieval-service
   newTag: 1.0.0
-- name: ghcr.io/haqdaar/embedding-service
+- name: ghcr.io/adhikar/embedding-service
   newTag: 1.0.0
-- name: ghcr.io/haqdaar/llm-gateway
+- name: ghcr.io/adhikar/llm-gateway
   newTag: 1.0.0
-- name: ghcr.io/haqdaar/ingestion-service
+- name: ghcr.io/adhikar/ingestion-service
   newTag: 1.0.0
-- name: ghcr.io/haqdaar/scheme-docs
+- name: ghcr.io/adhikar/scheme-docs
   newTag: 1.0.0
 patches:
 - target:
@@ -56,5 +56,5 @@ patches:
   patch: "- op: replace\n  path: /spec/template/spec/topologySpreadConstraints/0/topologyKey\n  value: topology.kubernetes.io/zone\n"
 - target:
     kind: Ingress
-    name: haqdaar-api
+    name: adhikar-api
   patch: "- op: add\n  path: /metadata/annotations/cert-manager.io~1cluster-issuer\n  value: letsencrypt-prod\n"

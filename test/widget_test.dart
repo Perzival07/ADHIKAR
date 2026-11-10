@@ -2,19 +2,19 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:haqdaar/core/models/citizen_profile.dart';
-import 'package:haqdaar/core/models/administrative_regions.dart';
-import 'package:haqdaar/core/services/scheme_engine.dart';
-import 'package:haqdaar/core/services/settings_service.dart';
-import 'package:haqdaar/core/services/auth_service.dart';
-import 'package:haqdaar/core/services/email_otp_service.dart';
-import 'package:haqdaar/core/services/latest_updates_service.dart';
-import 'package:haqdaar/data/schemes_corpus.dart';
-import 'package:haqdaar/data/internships_corpus.dart';
-import 'package:haqdaar/screens/wizard/adaptive_wizard_screen.dart';
+import 'package:adhikar/core/models/citizen_profile.dart';
+import 'package:adhikar/core/models/administrative_regions.dart';
+import 'package:adhikar/core/services/scheme_engine.dart';
+import 'package:adhikar/core/services/settings_service.dart';
+import 'package:adhikar/core/services/auth_service.dart';
+import 'package:adhikar/core/services/email_otp_service.dart';
+import 'package:adhikar/core/services/latest_updates_service.dart';
+import 'package:adhikar/data/schemes_corpus.dart';
+import 'package:adhikar/data/internships_corpus.dart';
+import 'package:adhikar/screens/wizard/adaptive_wizard_screen.dart';
 
 void main() {
-  group('Haqdaar Administrative Regions & Schemes Tests', () {
+  group('ADHIKAR Administrative Regions & Schemes Tests', () {
     test('Contains exactly 28 Indian States and 8 Union Territories (36 Regions)', () {
       expect(IndianRegions.allRegions.length, 36);
       expect(IndianRegions.stateNames.length, 28);
@@ -303,7 +303,7 @@ void main() {
     });
   });
 
-  group('Haqdaar Internship Portal Tests', () {
+  group('ADHIKAR Internship Portal Tests', () {
     test('Internship corpus has verified listings across Govt, PSUs, and Tech Giants', () {
       final internships = InternshipsCorpus.getInternships();
       expect(internships.isNotEmpty, true);
@@ -344,7 +344,7 @@ void main() {
     });
   });
 
-  group('Haqdaar Localization & 22 Scheduled Regional Languages Tests', () {
+  group('ADHIKAR Localization & 22 Scheduled Regional Languages Tests', () {
     test('Supports English plus all 22 Constitutionally Scheduled Indian Languages (23 Total)', () {
       final supported = SettingsService.supportedLanguages;
       expect(supported.length, 23);
@@ -417,7 +417,7 @@ void main() {
     });
   });
 
-  group('Haqdaar Authentication & Session Persistence Tests', () {
+  group('ADHIKAR Authentication & Session Persistence Tests', () {
     setUp(() {
       SharedPreferences.setMockInitialValues({});
     });
@@ -428,7 +428,7 @@ void main() {
 
       // Sign in with email
       final resEmail = await auth.signIn(
-        phoneOrEmail: 'citizen@haqdaar.gov.in',
+        phoneOrEmail: 'citizen@adhikar.gov.in',
         password: 'password123',
       );
       expect(resEmail.success, true);
@@ -453,7 +453,7 @@ void main() {
 
     test('Passwords are never stored in plaintext; legacy plaintext accounts are upgraded', () async {
       SharedPreferences.setMockInitialValues({
-        'haqdaar_accounts_database': jsonEncode({
+        'adhikar_accounts_database': jsonEncode({
           'old@example.com': {
             'user': {
               'id': 'u1',
@@ -477,7 +477,7 @@ void main() {
           name: 'New', phoneOrEmail: 'new@example.com', password: 'secret123', state: 'Assam');
 
       final prefs = await SharedPreferences.getInstance();
-      final raw = prefs.getString('haqdaar_accounts_database')!;
+      final raw = prefs.getString('adhikar_accounts_database')!;
       expect(raw.contains('legacyPass1'), false);
       expect(raw.contains('secret123'), false);
       expect(raw.contains('password123'), false);
@@ -490,7 +490,7 @@ void main() {
       await auth.init();
 
       final resWrongPass = await auth.signIn(
-        phoneOrEmail: 'citizen@haqdaar.gov.in',
+        phoneOrEmail: 'citizen@adhikar.gov.in',
         password: 'wrong_password',
       );
       expect(resWrongPass.success, false);
@@ -539,7 +539,7 @@ void main() {
       await auth.init();
 
       await auth.signIn(
-        phoneOrEmail: 'citizen@haqdaar.gov.in',
+        phoneOrEmail: 'citizen@adhikar.gov.in',
         password: 'password123',
       );
 
@@ -559,7 +559,7 @@ void main() {
       final auth1 = AuthService();
       await auth1.init();
       await auth1.signIn(
-        phoneOrEmail: 'citizen@haqdaar.gov.in',
+        phoneOrEmail: 'citizen@adhikar.gov.in',
         password: 'password123',
       );
       expect(auth1.isAuthenticated, true);
@@ -575,17 +575,17 @@ void main() {
       final auth = AuthService();
       await auth.init();
 
-      expect(await auth.accountExists('citizen@haqdaar.gov.in'), true);
+      expect(await auth.accountExists('citizen@adhikar.gov.in'), true);
       expect(await auth.accountExists('nonexistent_citizen@mail.com'), false);
 
-      final loginRes = await auth.signInWithVerifiedEmail('citizen@haqdaar.gov.in');
+      final loginRes = await auth.signInWithVerifiedEmail('citizen@adhikar.gov.in');
       expect(loginRes.success, true);
-      expect(loginRes.user?.phoneOrEmail, 'citizen@haqdaar.gov.in');
+      expect(loginRes.user?.phoneOrEmail, 'citizen@adhikar.gov.in');
       expect(auth.isAuthenticated, true);
     });
   });
 
-  group('Haqdaar Email OTP Authentication Tests', () {
+  group('ADHIKAR Email OTP Authentication Tests', () {
     test('EmailOtpService validates email address formats', () async {
       final otpService = EmailOtpService();
       final invalidRes = await otpService.sendOtp(recipientEmail: 'invalid-email');
@@ -616,7 +616,7 @@ void main() {
     });
   });
 
-  group('Haqdaar Latest Schemes & Internships (Last 1 Month) Tests', () {
+  group('ADHIKAR Latest Schemes & Internships (Last 1 Month) Tests', () {
     test('LatestUpdatesService fetches schemes and internships launched in last 1 month', () async {
       final service = LatestUpdatesService.instance;
       service.setMockEmptyForTesting(false);

@@ -12,7 +12,7 @@ from .security import hash_password
 log = logging.getLogger("auth_service")
 
 DEMO = [
-    {"email": "citizen@haqdaar.gov.in", "phone": None, "name": "Rajesh Sharma", "state": "Uttar Pradesh",
+    {"email": "citizen@adhikar.gov.in", "phone": None, "name": "Rajesh Sharma", "state": "Uttar Pradesh",
      "social_category": "OBC", "occupation": "Farmer"},
     {"email": None, "phone": "9876543210", "name": "Priya Patel", "state": "Gujarat",
      "social_category": "General", "occupation": "Student"},

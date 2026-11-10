@@ -232,7 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final user = widget.auth.currentUser;
 
     final displayName = user?.name ?? 'Registered Citizen';
-    final displayPhoneOrEmail = user?.phoneOrEmail ?? 'citizen@haqdaar.gov.in';
+    final displayPhoneOrEmail = user?.phoneOrEmail ?? 'citizen@adhikar.gov.in';
     final displayState = user?.state ?? widget.settings.selectedState;
     final displayCategory = user?.socialCategory ?? 'General';
     final displayOccupation = user?.occupation ?? 'Citizen';
@@ -399,7 +399,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     _buildProfileRow('Occupation Profile', displayOccupation),
                     _buildProfileRow('Social Category', displayCategory),
                     _buildProfileRow('Citizen Verification', 'Aadhaar / Self-Attested'),
-                    _buildProfileRow('Platform Version', 'Haqdaar v2.0 (Production)'),
+                    _buildProfileRow('Platform Version', 'ADHIKAR v2.0 (Production)'),
                   ],
                 ),
               ),

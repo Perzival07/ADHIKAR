@@ -1,0 +1,20 @@
+# llm-gateway routing for the LOCAL Ollama setup (plan P13). Select it with LLMGW_MODELS_FILE, e.g.
+#   scripts/dev_native.ps1 up                      (native stack, default: this file)
+#   docker compose -f docker-compose.yml -f docker-compose.llm.yml up -d   (containers, see SETUP_LOCAL_LLM.md)
+# models.yaml (mock) stays the default so CI, `make up` and the Kubernetes dev overlay need no model server.
+#
+# base_url is deliberately omitted: it comes from LLMGW_OLLAMA_BASE_URL
+# (http://127.0.0.1:11434 natively, http://host.docker.internal:11434 inside Docker).
+# To try another candidate, change `model` here (e.g. llama3.2:3b-instruct-q4_K_M) and restart llm-gateway.
+aliases:
+  default:
+    provider: mock
+  recommender:
+    provider: ollama
+    model: "qwen2.5:3b-instruct-q4_K_M"
+    options: {num_ctx: 4096, keep_alive: "30m"}
+    fallback: []
+  translate:
+    provider: ollama
+    model: "qwen2.5:3b-instruct-q4_K_M"
+    options: {num_ctx: 4096, keep_alive: "30m"}

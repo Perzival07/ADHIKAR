@@ -2,15 +2,15 @@ import logging
 from contextlib import asynccontextmanager
 
 import httpx
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
-from haqdaar_common import (
+from adhikar_common import (
     AccessLogMiddleware,
     Registry,
     RequestIDMiddleware,
     install_metrics,
     setup_json_logging,
 )
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import JSONResponse
 from qdrant_client import AsyncQdrantClient
 
 from .config import Settings, get_settings

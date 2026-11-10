@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections import Counter
 
-from haqdaar_common import Registry
+from adhikar_common import Registry
 
 
 class Metrics:

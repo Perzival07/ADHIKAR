@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = haqdaar
+PRODUCT_NAME = ADHIKAR
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.haqdaar.haqdaar
+PRODUCT_BUNDLE_IDENTIFIER = com.adhikar.adhikar
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2026 com.haqdaar. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 com.adhikar. All rights reserved.

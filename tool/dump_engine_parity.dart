@@ -5,8 +5,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:haqdaar/core/models/citizen_profile.dart';
-import 'package:haqdaar/core/services/scheme_engine.dart';
+import 'package:adhikar/core/models/citizen_profile.dart';
+import 'package:adhikar/core/services/scheme_engine.dart';
 
 CitizenProfile fromMap(Map<String, dynamic> m) => CitizenProfile(
       state: m['state'],

@@ -1,0 +1,11 @@
+# Native development stack: only the stateful infrastructure runs in Docker, published on LOOPBACK ONLY, and the
+# Python services run from .venv (scripts/dev_native.ps1). This lets them reach a model server bound to
+# 127.0.0.1 (Ollama) without exposing anything on the network.
+#   docker compose -f docker-compose.yml -f docker-compose.native.yml up -d --wait qdrant redis postgres
+services:
+  qdrant:
+    ports: ["127.0.0.1:6333:6333"]
+  redis:
+    ports: ["127.0.0.1:6379:6379"]
+  postgres:
+    ports: ["127.0.0.1:5432:5432"]

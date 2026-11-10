@@ -3,8 +3,8 @@ import json
 import httpx
 import jwt
 import pytest
+from adhikar_common import JWKSVerifier, TokenInvalid
 from cryptography.hazmat.primitives.asymmetric import ec
-from haqdaar_common import JWKSVerifier, TokenInvalid
 
 
 def make_key(kid):
@@ -17,7 +17,7 @@ def make_key(kid):
 def token(key, kid, **over):
     import time
 
-    claims = {"sub": "user-1", "iss": "haqdaar-auth", "aud": "haqdaar-api", "iat": int(time.time()), "exp": int(time.time()) + 60}
+    claims = {"sub": "user-1", "iss": "adhikar-auth", "aud": "adhikar-api", "iat": int(time.time()), "exp": int(time.time()) + 60}
     claims.update(over)
     return jwt.encode(claims, key, algorithm="ES256", headers={"kid": kid})
 
@@ -37,7 +37,7 @@ class JWKS:
 
 def verifier(server, clock=None):
     kw = {"clock": clock} if clock else {}
-    return JWKSVerifier("http://auth/.well-known/jwks.json", "haqdaar-auth", "haqdaar-api",
+    return JWKSVerifier("http://auth/.well-known/jwks.json", "adhikar-auth", "adhikar-api",
                         httpx.AsyncClient(transport=httpx.MockTransport(server)), **kw)
 
 

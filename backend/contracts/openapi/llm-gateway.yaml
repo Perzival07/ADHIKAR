@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Haqdaar llm-gateway
+  title: ADHIKAR llm-gateway
   version: 1.0.0
   description: Contract is versioned by path prefix (/v1). Breaking changes require
     /v2.

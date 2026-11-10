@@ -16,7 +16,7 @@ pg = secrets.token_urlsafe(24)
 files = {
     "postgres.env": {"POSTGRES_PASSWORD": pg},
     "auth.env": {
-        "AUTH_DATABASE_URL": f"postgresql+asyncpg://haqdaar:{pg}@postgres:5432/auth",
+        "AUTH_DATABASE_URL": f"postgresql+asyncpg://adhikar:{pg}@postgres:5432/auth",
         "AUTH_JWT_PRIVATE_KEY": base64.b64encode(generate_private_key_pem().encode()).decode(),
         "AUTH_OTP_SECRET": secrets.token_hex(32),
     },

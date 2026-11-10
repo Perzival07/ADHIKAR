@@ -5,7 +5,7 @@ from collections.abc import AsyncIterator
 from typing import Any
 
 import httpx
-from haqdaar_common import CircuitBreaker, CircuitOpen, outbound_headers
+from adhikar_common import CircuitBreaker, CircuitOpen, outbound_headers
 
 from .config import Settings
 from .contract_models import (

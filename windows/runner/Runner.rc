@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.haqdaar" "\0"
-            VALUE "FileDescription", "haqdaar" "\0"
+            VALUE "CompanyName", "com.adhikar" "\0"
+            VALUE "FileDescription", "ADHIKAR" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "haqdaar" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 com.haqdaar. All rights reserved." "\0"
-            VALUE "OriginalFilename", "haqdaar.exe" "\0"
-            VALUE "ProductName", "haqdaar" "\0"
+            VALUE "InternalName", "adhikar" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 com.adhikar. All rights reserved." "\0"
+            VALUE "OriginalFilename", "adhikar.exe" "\0"
+            VALUE "ProductName", "ADHIKAR" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

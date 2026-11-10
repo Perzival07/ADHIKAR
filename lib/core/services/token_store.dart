@@ -9,7 +9,7 @@ abstract class TokenStore {
 
 /// iOS Keychain / Android Keystore-backed storage (encrypted at rest).
 class SecureTokenStore implements TokenStore {
-  static const _key = 'haqdaar_refresh_token';
+  static const _key = 'adhikar_refresh_token';
   final FlutterSecureStorage _storage;
 
   SecureTokenStore([FlutterSecureStorage? storage]) : _storage = storage ?? const FlutterSecureStorage();

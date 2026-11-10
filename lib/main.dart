@@ -17,17 +17,17 @@ void main() async {
   // Every time the user opens the app, automatically fetch latest updates
   LatestUpdatesService.instance.fetchUpdates().ignore();
 
-  runApp(HaqdaarApp(
+  runApp(AdhikarApp(
     settings: settingsService,
     auth: authService,
   ));
 }
 
-class HaqdaarApp extends StatelessWidget {
+class AdhikarApp extends StatelessWidget {
   final SettingsService settings;
   final AuthService auth;
 
-  const HaqdaarApp({
+  const AdhikarApp({
     super.key,
     required this.settings,
     required this.auth,
@@ -39,7 +39,7 @@ class HaqdaarApp extends StatelessWidget {
       listenable: Listenable.merge([settings, auth]),
       builder: (context, _) {
         return MaterialApp(
-          title: 'Haqdaar - Welfare & Internships Navigator',
+          title: 'ADHIKAR - Welfare & Internships Navigator',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           locale: Locale(settings.currentLanguage),

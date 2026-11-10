@@ -24,7 +24,7 @@ class EmailOtpService extends ChangeNotifier {
   // NOTE: anything passed this way is still compiled into the app. This is for
   // local development only; production should send OTPs from a backend.
   static const String _gmailSender =
-      String.fromEnvironment('SMTP_SENDER', defaultValue: 'haqdaar.connect@gmail.com');
+      String.fromEnvironment('SMTP_SENDER', defaultValue: 'adhikar.connect@gmail.com');
   static const String _gmailAppPassword = String.fromEnvironment('SMTP_APP_PASSWORD');
 
   // Browsers cannot open raw SMTP sockets, so the mailer package can never work
@@ -118,19 +118,19 @@ class EmailOtpService extends ChangeNotifier {
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Haqdaar Verification Code</title>
+  <title>ADHIKAR Verification Code</title>
 </head>
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 24px;">
   <div style="max-width: 520px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.06); border: 1px solid #e2e8f0;">
     <div style="background: linear-gradient(135deg, #0D1B2A 0%, #1E3E62 100%); padding: 26px 20px; text-align: center;">
-      <h1 style="color: #ffffff; margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.5px;">Haqdaar • हकदार</h1>
+      <h1 style="color: #ffffff; margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.5px;">ADHIKAR • अधिकार</h1>
       <p style="color: #FF9933; margin: 6px 0 0 0; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">Citizen Welfare & Empowerment</p>
     </div>
     <div style="padding: 32px 26px;">
       <h2 style="color: #0f172a; font-size: 19px; margin: 0 0 12px 0; font-weight: 700;">Email Verification Code</h2>
       <p style="color: #475569; font-size: 14.5px; line-height: 1.6; margin: 0 0 20px 0;">
         Hello <strong>$name</strong>,<br><br>
-        Thank you for joining <strong>Haqdaar</strong>. To complete your account verification, enter the following 6-digit OTP in the app:
+        Thank you for joining <strong>ADHIKAR</strong>. To complete your account verification, enter the following 6-digit OTP in the app:
       </p>
       <div style="background: #f8fafc; border: 2px dashed #0D1B2A; border-radius: 12px; padding: 18px; text-align: center; margin: 24px 0;">
         <span style="font-size: 36px; font-weight: 800; letter-spacing: 10px; color: #0D1B2A; font-family: 'Courier New', Courier, monospace;">$otp</span>
@@ -146,7 +146,7 @@ class EmailOtpService extends ChangeNotifier {
     </div>
     <div style="background: #f1f5f9; padding: 16px; text-align: center; border-top: 1px solid #e2e8f0;">
       <p style="color: #64748b; font-size: 11.5px; margin: 0;">
-        Official Automated Email • Haqdaar Citizen Assistance Platform<br>
+        Official Automated Email • ADHIKAR Citizen Assistance Platform<br>
         Sent via <a href="mailto:$_gmailSender" style="color: #0D1B2A; text-decoration: none; font-weight: 600;">$_gmailSender</a>
       </p>
     </div>
@@ -155,12 +155,12 @@ class EmailOtpService extends ChangeNotifier {
 </html>
 ''';
 
-    final textContent = 'Hello $name,\n\nYour Haqdaar verification code is: $otp\n\nThis code is valid for 5 minutes. Do not share this code with anyone.\n\nHaqdaar Citizen Welfare Portal';
+    final textContent = 'Hello $name,\n\nYour ADHIKAR verification code is: $otp\n\nThis code is valid for 5 minutes. Do not share this code with anyone.\n\nADHIKAR Citizen Welfare Portal';
 
     final message = Message()
-      ..from = Address(_gmailSender, 'Haqdaar Portal')
+      ..from = Address(_gmailSender, 'ADHIKAR Portal')
       ..recipients.add(email)
-      ..subject = 'Your Haqdaar Verification Code: $otp'
+      ..subject = 'Your ADHIKAR Verification Code: $otp'
       ..text = textContent
       ..html = htmlContent;
 

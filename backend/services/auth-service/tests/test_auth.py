@@ -35,7 +35,7 @@ def test_access_token_verifies_against_published_jwks(client, sender):
     tok = signup(client, sender)["access_token"]
     jwks = client.get("/.well-known/jwks.json").json()
     key = jwt.PyJWK(jwks["keys"][0])
-    claims = jwt.decode(tok, key.key, algorithms=["ES256"], audience="haqdaar-api", issuer="haqdaar-auth")
+    claims = jwt.decode(tok, key.key, algorithms=["ES256"], audience="adhikar-api", issuer="adhikar-auth")
     assert claims["sub"] and claims["exp"] - claims["iat"] == 900
     assert jwt.get_unverified_header(tok)["kid"] == jwks["keys"][0]["kid"]
     assert "d" not in jwks["keys"][0]  # never publish the private part
@@ -160,7 +160,7 @@ def test_demo_seed_supports_phone_login(make):
     with make(seed_demo_users=True) as c:
         r = c.post("/v1/auth/login", json={"identifier": "9876543210", "password": "password123"})
         assert r.status_code == 200 and r.json()["user"]["name"] == "Priya Patel"
-        assert c.post("/v1/auth/login", json={"identifier": "citizen@haqdaar.gov.in", "password": "password123"}).status_code == 200
+        assert c.post("/v1/auth/login", json={"identifier": "citizen@adhikar.gov.in", "password": "password123"}).status_code == 200
 
 
 # ------------------------------------------------------------------ refresh tokens
@@ -199,9 +199,9 @@ def test_expired_refresh_token(make, sender):
 # ------------------------------------------------------------------ bearer tokens
 def test_bad_tokens_rejected(client, sender):
     good = signup(client, sender)["access_token"]
-    other_key = SigningKey.load("").issue("x", "haqdaar-auth", "haqdaar-api", 60)
-    wrong_aud = client.app.state.key.issue(good and "x", "haqdaar-auth", "someone-else", 60)
-    expired = client.app.state.key.issue("x", "haqdaar-auth", "haqdaar-api", -10)
+    other_key = SigningKey.load("").issue("x", "adhikar-auth", "adhikar-api", 60)
+    wrong_aud = client.app.state.key.issue(good and "x", "adhikar-auth", "someone-else", 60)
+    expired = client.app.state.key.issue("x", "adhikar-auth", "adhikar-api", -10)
     for tok in ("garbage", other_key, wrong_aud, expired, good[:-4] + "AAAA"):
         r = client.get("/v1/users/me", headers=bearer(tok))
         assert r.status_code == 401 and r.headers["www-authenticate"] == "Bearer"
@@ -264,7 +264,7 @@ def test_production_guardrails(override, message):
 
 def test_production_config_accepted_when_complete():
     s = Settings(env="production", jwt_private_key="k", otp_secret="s" * 40, email_backend="smtp",
-                 database_url="postgresql+asyncpg://u:p@db/auth", cors_origins="https://app.haqdaar.example")
+                 database_url="postgresql+asyncpg://u:p@db/auth", cors_origins="https://app.adhikar.example")
     assert s.is_production
 
 

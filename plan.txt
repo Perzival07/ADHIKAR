@@ -1,13 +1,15 @@
-HAQDAAR — RAG SCHEME RECOMMENDATION SYSTEM
+ADHIKAR — RAG SCHEME RECOMMENDATION SYSTEM
 Implementation plan as executable prompts
 ==========================================================================
 
-STATUS (updated 2026-11-10)
+STATUS (updated 2026-11-11)
 --------------------------
 DONE (built and tested with mock LLM + hash embedder): P01, P02, P03, P04, P05, P06, P07, P08, P09, P10, P11, P12,
 P14, P15.
-NOT DONE ON PURPOSE (needs the PC): P13 (install + wire the local LLM, soak test), P16 (fine-tuning dataset),
-P17 (QLoRA fine-tune + evaluate). Everything they depend on exists: the llm-gateway adapters (ollama /
+IN PROGRESS ON THE PC (2026-11-11): P13 part A done (Ollama installed, pinned to the 3070 Ti, qwen2.5-3b + llama3.2-3b
+pulled, bge-m3 on CPU, models.ollama.yaml, native stack script, soak_test.py; see backend/SETUP_LOCAL_LLM.md).
+P13 remaining: monitors to the 1650 Super (physical), soak test, eval baselines, pick the winner.
+NOT DONE: P16 (fine-tuning dataset), P17 (QLoRA fine-tune + evaluate). Everything they depend on exists: the llm-gateway adapters (ollama /
 openai_compatible), `models.yaml`, the eval harness (`python -m eval`) and the golden set.
 Notes from implementation: the corpus has 313 schemes (not 1,184); prompts v1/v2 live in
 backend/services/recommendation-service/src/recommendation_service/prompts/ (default v2).
@@ -36,7 +38,7 @@ WHERE EACH PROMPT RUNS
 GLOBAL CONTEXT (paste with every prompt)
 ==========================================================================
 
-Project: Haqdaar is a Flutter app (repo root) that helps Indian citizens find
+Project: ADHIKAR is a Flutter app (repo root) that helps Indian citizens find
 welfare schemes and internships. It has 1,184 schemes in
 lib/data/schemes_corpus.dart, a rule-based matcher in
 lib/core/services/scheme_engine.dart, and a citizen profile model in
@@ -109,7 +111,7 @@ Target layout:
     docker-compose.yml
     Makefile
     contracts/                 (OpenAPI specs + JSON Schemas, source of truth)
-    libs/haqdaar_common/       (logging + request-id ONLY)
+    libs/adhikar_common/       (logging + request-id ONLY)
     data/scheme_docs/          (THE DOCUMENTS FOLDER)
     services/
       llm-gateway/             :8001  provider-neutral text generation
@@ -154,7 +156,7 @@ Read the GLOBAL CONTEXT. Create the backend/ layout above.
   - src/<service_pkg>/config.py (pydantic-settings, env prefix per service,
     e.g. LLMGW_, EMBED_, INGEST_, RETRIEVAL_, ELIG_, RECO_)
   - tests/test_health.py, Dockerfile (slim, non-root), .env.example, README.md
-- Create libs/haqdaar_common with only:
+- Create libs/adhikar_common with only:
   - JSON logging setup
   - a request-id middleware that reads or generates X-Request-ID and adds it
     to logs and outbound httpx calls
@@ -246,7 +248,7 @@ llm-gateway. This is the ONLY place that knows about LLM vendors.
      server, LM Studio, vLLM). Uses response_format json_schema when
      supported, otherwise prompt-instruct + validate.
   Leave a clearly marked extension point (docs + an empty adapters/ entry in
-  the README) for future cloud adapters such as Claude or Gemini. Don't
+  the README) for future cloud adapters for hosted models. Don't
   implement them now.
 - Routing config (models.yaml, path from env):
   - aliases -> {provider, model, options}, e.g.
@@ -821,7 +823,7 @@ Read backend/CONTEXT.md, finetune/DATASET.md and the P13 eval results.
    - merge the adapter, convert to GGUF, quantize to Q4_K_M (and Q5_K_M to
      compare)
    - write finetune/Modelfile (system prompt, num_ctx 4096, temperature low)
-   - create the Ollama model, e.g. "haqdaar-reco-3b:v1"
+   - create the Ollama model, e.g. "adhikar-reco-3b:v1"
    - version every artefact (base model, dataset hash, config, git commit)
      in finetune/MODEL_CARD.md
 5. Evaluate with the SAME P12 harness on the held-out test split and the
@@ -837,7 +839,7 @@ Read backend/CONTEXT.md, finetune/DATASET.md and the P13 eval results.
    - manual Hindi quality (20 samples)
    Re-run the P13 soak test with the fine-tuned model.
 6. Decide:
-   - Ship (point the models.yaml "recommender" alias at haqdaar-reco-3b:v1)
+   - Ship (point the models.yaml "recommender" alias at adhikar-reco-3b:v1)
      ONLY if it beats the baseline on hallucination + JSON validity without
      hurting recall.
    - Otherwise keep the base model and record why in MODEL_CARD.md.
@@ -857,7 +859,7 @@ DONE WHEN:
 ==========================================================================
 LATER / OPTIONAL IDEAS (not part of the core sequence)
 ==========================================================================
-- Cloud LLM adapters in llm-gateway (Claude, Gemini) behind the same alias
+- Cloud LLM adapters in llm-gateway (hosted models) behind the same alias
   system. Only models.yaml changes for the other services.
 - Scraper/ingestor for official sources (myScheme.gov.in, state portals) into
   data/scheme_docs/, with a human review step before meta.yaml is trusted.

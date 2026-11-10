@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: haqdaar-api
+  name: adhikar-api
   labels:
     app.kubernetes.io/name: api
     app.kubernetes.io/component: edge
@@ -15,10 +15,10 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - api.haqdaar.example
+    - api.adhikar.example
     secretName: api-tls
   rules:
-  - host: api.haqdaar.example
+  - host: api.adhikar.example
     http:
       paths:
       - path: /v1/recommendations

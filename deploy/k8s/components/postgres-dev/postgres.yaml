@@ -33,7 +33,7 @@ spec:
         - name: POSTGRES_DB
           value: auth
         - name: POSTGRES_USER
-          value: haqdaar
+          value: adhikar
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -50,7 +50,7 @@ spec:
             command:
             - pg_isready
             - -U
-            - haqdaar
+            - adhikar
             - -d
             - auth
           periodSeconds: 10

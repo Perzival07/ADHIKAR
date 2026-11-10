@@ -8,7 +8,7 @@ from dataclasses import dataclass
 import httpx
 import jwt
 
-log = logging.getLogger("haqdaar_common.jwt")
+log = logging.getLogger("adhikar_common.jwt")
 
 
 class TokenInvalid(Exception):

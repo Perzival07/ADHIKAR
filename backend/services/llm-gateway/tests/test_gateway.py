@@ -298,7 +298,7 @@ def test_metrics_endpoint_counts_requests_tokens_repairs_and_failures(tmp_path):
     assert 'llmgw_json_repairs_total{alias="a"} 1' in text
     assert 'llmgw_tokens_total{alias="a",kind="prompt"} 6' in text and 'llmgw_tokens_total{alias="a",kind="completion"} 4' in text
     assert 'llmgw_provider_failures_total{alias="dead",provider="mock"} 1' in text
-    assert 'haqdaar_http_requests_total{service="llm-gateway",method="POST",route="/v1/chat",status="200"} 1' in text
+    assert 'adhikar_http_requests_total{service="llm-gateway",method="POST",route="/v1/chat",status="200"} 1' in text
     assert "/metrics" not in text.replace("# ", "") or 'route="/metrics"' not in text
 
 

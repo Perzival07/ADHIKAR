@@ -1,6 +1,6 @@
 import fakeredis.aioredis
 import pytest
-from haqdaar_common import (
+from adhikar_common import (
     MemoryCache,
     MemoryRateLimiter,
     RedisCache,

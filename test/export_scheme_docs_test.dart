@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:haqdaar/data/schemes_corpus.dart';
+import 'package:adhikar/data/schemes_corpus.dart';
 
 import '../tool/export_scheme_docs.dart';
 

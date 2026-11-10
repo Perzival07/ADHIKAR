@@ -38,7 +38,7 @@ class AuthService extends ChangeNotifier {
   String? _refreshToken;
   DateTime? _otpRequestedAt;
   int _otpCooldown = 60;
-  static const String _prefRemoteUser = 'haqdaar_remote_user_cache';
+  static const String _prefRemoteUser = 'adhikar_remote_user_cache';
 
   /// True when accounts live on the server (auth-service).
   bool get isRemote => _api != null;
@@ -46,9 +46,9 @@ class AuthService extends ChangeNotifier {
   /// Local demo mode can tell whether an email is registered; the server deliberately cannot (no enumeration).
   bool get canCheckAccounts => !isRemote;
 
-  static const String _prefCurrentUser = 'haqdaar_current_user_session';
-  static const String _prefIsLoggedIn = 'haqdaar_is_logged_in_state';
-  static const String _prefAccountsDb = 'haqdaar_accounts_database';
+  static const String _prefCurrentUser = 'adhikar_current_user_session';
+  static const String _prefIsLoggedIn = 'adhikar_is_logged_in_state';
+  static const String _prefAccountsDb = 'adhikar_accounts_database';
 
   UserModel? _currentUser;
   bool _isInitialized = false;
@@ -85,11 +85,11 @@ class AuthService extends ChangeNotifier {
     final accountsJson = prefs.getString(_prefAccountsDb);
     if (accountsJson == null || accountsJson.isEmpty) {
       final defaultAccounts = {
-        'citizen@haqdaar.gov.in': {
+        'citizen@adhikar.gov.in': {
           'user': {
             'id': 'citizen_verified_1',
             'name': 'Rajesh Sharma',
-            'phoneOrEmail': 'citizen@haqdaar.gov.in',
+            'phoneOrEmail': 'citizen@adhikar.gov.in',
             'state': 'Uttar Pradesh',
             'socialCategory': 'OBC',
             'occupation': 'Farmer',

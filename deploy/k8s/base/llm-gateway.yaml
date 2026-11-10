@@ -27,7 +27,7 @@ spec:
         prometheus.io/port: '8001'
         prometheus.io/path: /metrics
     spec:
-      serviceAccountName: haqdaar-workload
+      serviceAccountName: adhikar-workload
       automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
@@ -47,14 +47,14 @@ spec:
       initContainers: []
       containers:
       - name: llm-gateway
-        image: ghcr.io/haqdaar/llm-gateway:latest
+        image: ghcr.io/adhikar/llm-gateway:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
           containerPort: 8001
         envFrom:
         - configMapRef:
-            name: haqdaar-config
+            name: adhikar-config
         env:
         - name: PORT
           value: '8001'

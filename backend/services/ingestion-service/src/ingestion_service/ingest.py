@@ -5,7 +5,7 @@ import logging
 import time
 from pathlib import Path
 
-from haqdaar_common import Registry
+from adhikar_common import Registry
 
 from .chunker import chunk_id, chunk_section
 from .config import Settings

@@ -9,9 +9,9 @@ ARG SERVICE
 ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 WORKDIR /src
 COPY constraints.txt ./
-COPY libs/haqdaar_common ./libs/haqdaar_common
+COPY libs/adhikar_common ./libs/adhikar_common
 COPY services/${SERVICE} ./services/${SERVICE}
-RUN pip wheel --wheel-dir /wheels -c constraints.txt ./libs/haqdaar_common ./services/${SERVICE}
+RUN pip wheel --wheel-dir /wheels -c constraints.txt ./libs/adhikar_common ./services/${SERVICE}
 
 # ---- runtime
 FROM python:${PYTHON_VERSION}-slim AS runtime
@@ -19,9 +19,9 @@ ARG SERVICE
 ARG APP_MODULE
 ARG PORT=8000
 ARG VERSION=dev
-LABEL org.opencontainers.image.title="haqdaar-${SERVICE}" \
+LABEL org.opencontainers.image.title="adhikar-${SERVICE}" \
       org.opencontainers.image.version="${VERSION}" \
-      org.opencontainers.image.source="https://github.com/haqdaar/haqdaar"
+      org.opencontainers.image.source="https://github.com/adhikar/adhikar"
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     APP_MODULE=${APP_MODULE} \

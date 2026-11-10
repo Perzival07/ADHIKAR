@@ -22,8 +22,8 @@ What keeps that manageable as users grow:
 4. **Per-account / per-IP rate limits** stop a single client from consuming the LLM.
 
 Scale-out triggers to watch (all exported as metrics, alerts in `components/monitoring`):
-- `HaqdaarLlmQueueRejections` / rising `reco_fallback_total` -> add model servers.
-- `HaqdaarRecommendationLatencyHigh` (p95 > 20 s) -> LLM saturated or cache hit rate dropped.
+- `AdhikarLlmQueueRejections` / rising `reco_fallback_total` -> add model servers.
+- `AdhikarRecommendationLatencyHigh` (p95 > 20 s) -> LLM saturated or cache hit rate dropped.
 - HPA at `maxReplicas` -> raise the bound or the pod CPU requests.
 
 ## Rules of thumb

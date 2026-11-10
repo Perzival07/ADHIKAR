@@ -10,7 +10,7 @@ import yaml
 
 BACKEND = Path(__file__).resolve().parents[1]
 REPO = BACKEND.parent
-SRC_DIRS = [*sorted((BACKEND / "services").glob("*/src")), BACKEND / "libs" / "haqdaar_common" / "src"]
+SRC_DIRS = [*sorted((BACKEND / "services").glob("*/src")), BACKEND / "libs" / "adhikar_common" / "src"]
 PY_FILES = [p for d in SRC_DIRS for p in d.rglob("*.py") if p.name != "contract_models.py"]
 
 # profile fields that must never reach a log line

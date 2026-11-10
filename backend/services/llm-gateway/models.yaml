@@ -24,6 +24,6 @@ aliases:
 #    base_url: http://host.docker.internal:8080
 #    options: {supports_json_schema: false, max_context: 4096}
 #
-# ---- Extension point: cloud adapters (Claude, Gemini, ...) ----
+# ---- Extension point: cloud adapters (hosted models, ...) ----
 # Implement llm_gateway.providers.base.LLMProvider, register it in providers/__init__.py (REGISTRY),
 # then reference it here. Nothing outside llm-gateway changes.

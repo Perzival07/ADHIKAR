@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:haqdaar/core/models/citizen_profile.dart';
-import 'package:haqdaar/core/services/auth_api_client.dart';
-import 'package:haqdaar/core/services/auth_service.dart';
-import 'package:haqdaar/core/services/recommendation_api_client.dart';
-import 'package:haqdaar/core/services/token_store.dart';
+import 'package:adhikar/core/models/citizen_profile.dart';
+import 'package:adhikar/core/services/auth_api_client.dart';
+import 'package:adhikar/core/services/auth_service.dart';
+import 'package:adhikar/core/services/recommendation_api_client.dart';
+import 'package:adhikar/core/services/token_store.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -252,7 +252,7 @@ void main() {
     await local.init();
     expect(local.isRemote, false);
     expect(local.canCheckAccounts, true);
-    expect((await local.signIn(phoneOrEmail: 'citizen@haqdaar.gov.in', password: 'password123')).success, true);
+    expect((await local.signIn(phoneOrEmail: 'citizen@adhikar.gov.in', password: 'password123')).success, true);
     expect(await local.accessToken(), isNull);
   });
 }

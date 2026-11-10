@@ -5,7 +5,7 @@ import logging
 from abc import ABC, abstractmethod
 
 import httpx
-from haqdaar_common import outbound_headers
+from adhikar_common import outbound_headers
 
 from .contract_models import Chunk
 

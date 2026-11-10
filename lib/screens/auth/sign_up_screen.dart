@@ -188,7 +188,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(height: 16),
 
               Text(
-                'Register with Haqdaar',
+                'Register with ADHIKAR',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 22,

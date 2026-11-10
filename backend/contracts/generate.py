@@ -22,25 +22,25 @@ SHARED_SCHEMAS = [m.CitizenProfile, m.SchemeDocMeta, m.Chunk, m.EligibilityResul
 
 # service -> (title, port, {path: {method: (summary, request_model|None, response_model)}})
 SERVICES: dict[str, tuple[str, int, dict]] = {
-    "llm-gateway": ("Haqdaar llm-gateway", 8001, {
+    "llm-gateway": ("ADHIKAR llm-gateway", 8001, {
         "/v1/chat": {"post": ("Provider-neutral chat/completion by model alias (SSE when stream=true)", m.ChatRequest, m.ChatResponse)},
         "/v1/models": {"get": ("List configured model aliases", None, m.ModelsResponse)},
     }),
-    "embedding-service": ("Haqdaar embedding-service", 8002, {
+    "embedding-service": ("ADHIKAR embedding-service", 8002, {
         "/v1/embed": {"post": ("Embed texts", m.EmbedRequest, m.EmbedResponse)},
     }),
-    "ingestion-service": ("Haqdaar ingestion-service", 8003, {
+    "ingestion-service": ("ADHIKAR ingestion-service", 8003, {
         "/v1/ingest": {"post": ("Start an ingestion run", m.IngestRequest, m.IngestStatus)},
         "/v1/ingest/status": {"get": ("Ingestion progress", None, m.IngestStatus)},
         "/v1/docs/{scheme_id}": {"delete": ("Remove a scheme's chunks", None, m.DeleteDocResponse)},
     }),
-    "retrieval-service": ("Haqdaar retrieval-service", 8004, {
+    "retrieval-service": ("ADHIKAR retrieval-service", 8004, {
         "/v1/search": {"post": ("Filtered hybrid search", m.SearchRequest, m.SearchResponse)},
     }),
-    "eligibility-service": ("Haqdaar eligibility-service", 8005, {
+    "eligibility-service": ("ADHIKAR eligibility-service", 8005, {
         "/v1/eligibility": {"post": ("Evaluate eligibility rules", m.EligibilityRequest, m.EligibilityResponse)},
     }),
-    "recommendation-service": ("Haqdaar recommendation-service (public API)", 8000, {
+    "recommendation-service": ("ADHIKAR recommendation-service (public API)", 8000, {
         "/v1/recommendations": {"post": ("Recommend schemes for a profile", m.RecommendationRequest, m.RecommendationResponse)},
         "/v1/explain": {"post": ("Explain one scheme for a profile (detail screen)", m.ExplainRequest, m.ExplainResponse)},
     }),

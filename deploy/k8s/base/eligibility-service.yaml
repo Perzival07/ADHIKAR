@@ -27,7 +27,7 @@ spec:
         prometheus.io/port: '8005'
         prometheus.io/path: /metrics
     spec:
-      serviceAccountName: haqdaar-workload
+      serviceAccountName: adhikar-workload
       automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
@@ -46,7 +46,7 @@ spec:
             app.kubernetes.io/name: eligibility-service
       initContainers:
       - name: scheme-docs
-        image: ghcr.io/haqdaar/scheme-docs:latest
+        image: ghcr.io/adhikar/scheme-docs:latest
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: docs
@@ -66,14 +66,14 @@ spec:
             memory: 64Mi
       containers:
       - name: eligibility-service
-        image: ghcr.io/haqdaar/eligibility-service:latest
+        image: ghcr.io/adhikar/eligibility-service:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
           containerPort: 8005
         envFrom:
         - configMapRef:
-            name: haqdaar-config
+            name: adhikar-config
         env:
         - name: PORT
           value: '8005'

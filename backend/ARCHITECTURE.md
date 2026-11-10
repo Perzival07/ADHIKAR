@@ -4,7 +4,7 @@
 > This file describes the RAG pipeline services.
 
 Six independent services plus Qdrant. They communicate only over HTTP using the contracts in `contracts/`.
-No service imports another service's code. `libs/haqdaar_common` holds logging, request-id and
+No service imports another service's code. `libs/adhikar_common` holds logging, request-id and
 profile-redaction helpers only.
 
 | Service | Port | Responsibility | Calls |

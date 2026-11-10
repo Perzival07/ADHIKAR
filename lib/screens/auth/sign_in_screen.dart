@@ -83,7 +83,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   void _quickDemoSignIn() {
-    _identifierController.text = 'citizen@haqdaar.gov.in';
+    _identifierController.text = 'citizen@adhikar.gov.in';
     _passwordController.text = 'password123';
     _handleSignIn();
   }

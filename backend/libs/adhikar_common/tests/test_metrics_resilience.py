@@ -1,4 +1,4 @@
-from haqdaar_common import (
+from adhikar_common import (
     CircuitBreaker,
     CircuitOpen,
     MetricsMiddleware,
@@ -51,10 +51,10 @@ def test_http_middleware_counts_by_route_template_not_raw_path():
     c.get("/nope")
     assert c.get("/boom").status_code == 500
     text = c.get("/metrics").text
-    assert 'haqdaar_http_requests_total{service="svc",method="GET",route="unmatched",status="200"} 2' in text or "unmatched" in text
+    assert 'adhikar_http_requests_total{service="svc",method="GET",route="unmatched",status="200"} 2' in text or "unmatched" in text
     assert "/items/1" not in text and "/items/2" not in text  # no unbounded label cardinality
     assert 'status="500"' in text and 'status="404"' in text
-    assert "haqdaar_http_request_duration_seconds_count" in text
+    assert "adhikar_http_request_duration_seconds_count" in text
     assert 'route="/metrics"' not in text  # the scrape itself is not counted
 
 
@@ -97,7 +97,7 @@ def test_circuit_breaker_lifecycle():
 def test_access_log_has_request_id_and_no_query_string(capsys):
     import json
 
-    from haqdaar_common import (
+    from adhikar_common import (
         AccessLogMiddleware,
         RequestIDMiddleware,
         setup_json_logging,

@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 # Build every service image and the scheme-docs data image.
-#   scripts/build_images.sh [TAG] [REGISTRY_PREFIX]      e.g. scripts/build_images.sh 1.4.0 ghcr.io/haqdaar
+#   scripts/build_images.sh [TAG] [REGISTRY_PREFIX]      e.g. scripts/build_images.sh 1.4.0 ghcr.io/adhikar
 set -eu
 TAG="${1:-local}"
-PREFIX="${2:-haqdaar}"
+PREFIX="${2:-adhikar}"
 cd "$(dirname "$0")/.."
 port_of() {
   case "$1" in

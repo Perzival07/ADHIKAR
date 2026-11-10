@@ -17,10 +17,10 @@ class EmailSender(Protocol):
 
 
 def _body(code: str, purpose: str) -> tuple[str, str]:
-    action = "create your Haqdaar account" if purpose == "signup" else "sign in to Haqdaar"
-    subject = "Your Haqdaar verification code"
+    action = "create your ADHIKAR account" if purpose == "signup" else "sign in to ADHIKAR"
+    subject = "Your ADHIKAR verification code"
     text = (f"Your code to {action} is {code}.\n\nIt expires in 5 minutes. Never share this code with anyone; "
-            "Haqdaar staff will never ask for it.\n\nIf you did not request this, you can ignore this email.")
+            "ADHIKAR staff will never ask for it.\n\nIf you did not request this, you can ignore this email.")
     return subject, text
 
 

@@ -587,8 +587,8 @@ class SettingsScreen extends StatelessWidget {
         ),
         content: Text(
           isHi
-              ? 'क्या आप वाकई हक़दार ऐप से साइन आउट करना चाहते हैं? आपकी सहेजी गई जानकारी सुरक्षित रहेगी।'
-              : 'Are you sure you want to sign out of Haqdaar? Your preferences and saved eligibility will remain safe.',
+              ? 'क्या आप वाकई अधिकार ऐप से साइन आउट करना चाहते हैं? आपकी सहेजी गई जानकारी सुरक्षित रहेगी।'
+              : 'Are you sure you want to sign out of ADHIKAR? Your preferences and saved eligibility will remain safe.',
         ),
         actions: [
           TextButton(

@@ -8,3 +8,5 @@ qdrant_storage/
 *.egg-info/
 eval/results/*.json
 !eval/results/baseline*.json
+.logs/
+.state/

@@ -5,10 +5,7 @@ import logging
 from contextlib import asynccontextmanager
 
 import httpx
-from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from haqdaar_common import (
+from adhikar_common import (
     AccessLogMiddleware,
     JWKSVerifier,
     Principal,
@@ -21,6 +18,9 @@ from haqdaar_common import (
     make_redis,
     setup_json_logging,
 )
+from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from sse_starlette.sse import EventSourceResponse
 
 from .clients import Clients, DependencyError

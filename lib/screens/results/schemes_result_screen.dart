@@ -366,7 +366,7 @@ class _SchemesResultScreenState extends State<SchemesResultScreen> {
               const Icon(Icons.tips_and_updates_rounded, color: AppTheme.accentSaffron, size: 20),
               const SizedBox(width: 8),
               Text(
-                isHi ? 'हक़दार रणनीतिक मार्गदर्शन' : 'Haqdaar Priority Advisor',
+                isHi ? 'अधिकार रणनीतिक मार्गदर्शन' : 'ADHIKAR Priority Advisor',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 13.5,

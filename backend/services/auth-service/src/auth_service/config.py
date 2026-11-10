@@ -18,8 +18,8 @@ class Settings(BaseSettings):
 
     # JWT (ES256). PEM private key; in development an ephemeral key is generated if empty.
     jwt_private_key: str = ""
-    jwt_issuer: str = "haqdaar-auth"
-    jwt_audience: str = "haqdaar-api"
+    jwt_issuer: str = "adhikar-auth"
+    jwt_audience: str = "adhikar-api"
     access_token_ttl: int = 900  # 15 min
     refresh_token_ttl: int = 30 * 24 * 3600  # 30 days
 
@@ -45,7 +45,7 @@ class Settings(BaseSettings):
     smtp_port: int = 587
     smtp_username: str = ""
     smtp_password: str = ""
-    smtp_from: str = "Haqdaar <no-reply@haqdaar.example>"
+    smtp_from: str = "ADHIKAR <no-reply@adhikar.example>"
     smtp_starttls: bool = True
 
     cors_origins: str = ""

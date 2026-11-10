@@ -45,8 +45,8 @@ class Settings(BaseSettings):
     # end-user authentication: tokens from auth-service, verified with its JWKS (no shared secret)
     auth_mode: str = "optional"  # off | optional (anonymous allowed, tokens verified if sent) | required
     auth_jwks_url: str = "http://auth-service:8006/.well-known/jwks.json"
-    auth_issuer: str = "haqdaar-auth"
-    auth_audience: str = "haqdaar-api"
+    auth_issuer: str = "adhikar-auth"
+    auth_audience: str = "adhikar-api"
 
     cache_ttl: int = 120
     cache_max: int = 1000

@@ -7,7 +7,7 @@ import time
 from collections.abc import Awaitable, Callable
 from typing import Any
 
-from haqdaar_common import Cache, get_request_id, profile_hash, redact_profile
+from adhikar_common import Cache, get_request_id, profile_hash, redact_profile
 
 from . import prompts
 from .clients import Clients, DependencyError

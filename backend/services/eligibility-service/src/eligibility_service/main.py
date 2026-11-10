@@ -3,9 +3,7 @@ import signal
 import threading
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
-from fastapi.responses import JSONResponse
-from haqdaar_common import (
+from adhikar_common import (
     AccessLogMiddleware,
     Registry,
     RequestIDMiddleware,
@@ -13,6 +11,8 @@ from haqdaar_common import (
     redact_profile,
     setup_json_logging,
 )
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 
 from .config import Settings, get_settings
 from .contract_models import EligibilityRequest, EligibilityResponse

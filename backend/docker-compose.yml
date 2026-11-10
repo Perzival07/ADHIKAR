@@ -1,7 +1,7 @@
 # Local / CI stack: mock LLM + hash embedder by default (no models needed).
 # Production runs on Kubernetes (deploy/k8s); this file mirrors that topology for development and e2e tests.
 # Only the two public APIs (recommendation-service, auth-service) publish host ports.
-name: haqdaar
+name: adhikar
 
 x-common: &common
   restart: unless-stopped
@@ -40,22 +40,22 @@ services:
     image: postgres:16-alpine
     environment:
       POSTGRES_DB: auth
-      POSTGRES_USER: haqdaar
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-haqdaar-dev-only}
+      POSTGRES_USER: adhikar
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-adhikar-dev-only}
     volumes: [postgres_data:/var/lib/postgresql/data]
     healthcheck:
       <<: *health
-      test: ["CMD-SHELL", "pg_isready -U haqdaar -d auth"]
+      test: ["CMD-SHELL", "pg_isready -U adhikar -d auth"]
 
   # ---------------------------------------------------------------- accounts
   auth-migrate:
     networks: [internal]
     build: {<<: *build, args: {SERVICE: auth-service, APP_MODULE: "auth_service.main:app_factory", PORT: "8006"}}
-    image: haqdaar/auth-service:local
+    image: adhikar/auth-service:local
     command: ["python", "-m", "auth_service", "migrate"]
     environment: &auth_env
       AUTH_ENV: development
-      AUTH_DATABASE_URL: postgresql+asyncpg://haqdaar:${POSTGRES_PASSWORD:-haqdaar-dev-only}@postgres:5432/auth
+      AUTH_DATABASE_URL: postgresql+asyncpg://adhikar:${POSTGRES_PASSWORD:-adhikar-dev-only}@postgres:5432/auth
       AUTH_REDIS_URL: redis://redis:6379/1
       AUTH_EMAIL_BACKEND: console  # OTP codes appear in this service's log (development only)
       AUTH_SEED_DEMO_USERS: "true"
@@ -66,7 +66,7 @@ services:
 
   auth-service:
     <<: *common
-    image: haqdaar/auth-service:local
+    image: adhikar/auth-service:local
     environment: *auth_env
     ports: ["8006:8006"]
     depends_on:
@@ -80,7 +80,7 @@ services:
   llm-gateway:
     <<: *common
     build: {<<: *build, args: {SERVICE: llm-gateway, APP_MODULE: "llm_gateway.main:app_factory", PORT: "8001"}}
-    image: haqdaar/llm-gateway:local
+    image: adhikar/llm-gateway:local
     environment:
       LLMGW_MODELS_FILE: /config/models.yaml
       LLMGW_CONCURRENCY: "1"
@@ -93,7 +93,7 @@ services:
   embedding-service:
     <<: *common
     build: {<<: *build, args: {SERVICE: embedding-service, APP_MODULE: "embedding_service.main:app_factory", PORT: "8002"}}
-    image: haqdaar/embedding-service:local
+    image: adhikar/embedding-service:local
     environment:
       EMBED_PROVIDER: ${EMBED_PROVIDER:-hash}
     healthcheck:
@@ -103,7 +103,7 @@ services:
   ingestion-service:
     <<: *common
     build: {<<: *build, args: {SERVICE: ingestion-service, APP_MODULE: "ingestion_service.main:app_factory", PORT: "8003"}}
-    image: haqdaar/ingestion-service:local
+    image: adhikar/ingestion-service:local
     depends_on:
       qdrant: {condition: service_healthy}
       embedding-service: {condition: service_healthy}
@@ -120,7 +120,7 @@ services:
   retrieval-service:
     <<: *common
     build: {<<: *build, args: {SERVICE: retrieval-service, APP_MODULE: "retrieval_service.main:app_factory", PORT: "8004"}}
-    image: haqdaar/retrieval-service:local
+    image: adhikar/retrieval-service:local
     depends_on:
       qdrant: {condition: service_healthy}
       embedding-service: {condition: service_healthy}
@@ -134,7 +134,7 @@ services:
   eligibility-service:
     <<: *common
     build: {<<: *build, args: {SERVICE: eligibility-service, APP_MODULE: "eligibility_service.main:app_factory", PORT: "8005"}}
-    image: haqdaar/eligibility-service:local
+    image: adhikar/eligibility-service:local
     environment:
       ELIG_DOCS_DIR: /data/scheme_docs
     volumes: [./data/scheme_docs:/data/scheme_docs:ro]
@@ -145,7 +145,7 @@ services:
   recommendation-service:
     <<: *common
     build: {<<: *build, args: {SERVICE: recommendation-service, APP_MODULE: "recommendation_service.main:app_factory", PORT: "8000"}}
-    image: haqdaar/recommendation-service:local
+    image: adhikar/recommendation-service:local
     depends_on:
       eligibility-service: {condition: service_healthy}
       retrieval-service: {condition: service_healthy}

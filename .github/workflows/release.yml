@@ -88,8 +88,8 @@ jobs:
         working-directory: deploy/k8s/overlays/prod
         run: |
           for s in auth-service recommendation-service eligibility-service retrieval-service embedding-service llm-gateway ingestion-service scheme-docs; do
-            kustomize edit set image "ghcr.io/haqdaar/$s=${REGISTRY}/$s:${GITHUB_REF_NAME}"
+            kustomize edit set image "ghcr.io/adhikar/$s=${REGISTRY}/$s:${GITHUB_REF_NAME}"
           done
-      - run: kubectl kustomize deploy/k8s/overlays/prod > haqdaar-${{ github.ref_name }}.yaml
+      - run: kubectl kustomize deploy/k8s/overlays/prod > adhikar-${{ github.ref_name }}.yaml
       - uses: actions/upload-artifact@v4
-        with: {name: "manifests-${{ github.ref_name }}", path: "haqdaar-${{ github.ref_name }}.yaml"}
+        with: {name: "manifests-${{ github.ref_name }}", path: "adhikar-${{ github.ref_name }}.yaml"}

@@ -18,7 +18,7 @@
 - **Services never import each other.** Cross-service data goes through `backend/contracts/`. After changing
   `contracts/contract_models.py`: `python contracts/generate.py && python contracts/sync.py`. After changing the auth
   API: `UPDATE_CONTRACTS=1 pytest services/auth-service/tests/test_contract.py` and review the diff.
-- **`libs/haqdaar_common` is infrastructure only** (logging, ids, metrics, breakers, shared state, JWT verification).
+- **`libs/adhikar_common` is infrastructure only** (logging, ids, metrics, breakers, shared state, JWT verification).
 - **Never log profile answers or tokens.** A static test inspects every log call.
 - **Eligibility rules change in two places**: the Dart engine and `eligibility-service/.../rules/*.yaml`. Regenerate
   the parity fixture (`tests/fixtures/make_parity_profiles.py` + `dart run tool/dump_engine_parity.dart ...`).

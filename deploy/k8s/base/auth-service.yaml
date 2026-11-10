@@ -27,7 +27,7 @@ spec:
         prometheus.io/port: '8006'
         prometheus.io/path: /metrics
     spec:
-      serviceAccountName: haqdaar-workload
+      serviceAccountName: adhikar-workload
       automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
@@ -46,7 +46,7 @@ spec:
             app.kubernetes.io/name: auth-service
       initContainers:
       - name: migrate
-        image: ghcr.io/haqdaar/auth-service:latest
+        image: ghcr.io/adhikar/auth-service:latest
         imagePullPolicy: IfNotPresent
         command:
         - python
@@ -55,7 +55,7 @@ spec:
         - migrate
         envFrom:
         - configMapRef:
-            name: haqdaar-config
+            name: adhikar-config
         - secretRef:
             name: auth-secrets
         securityContext: &id001
@@ -75,14 +75,14 @@ spec:
           mountPath: /tmp
       containers:
       - name: auth-service
-        image: ghcr.io/haqdaar/auth-service:latest
+        image: ghcr.io/adhikar/auth-service:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
           containerPort: 8006
         envFrom:
         - configMapRef:
-            name: haqdaar-config
+            name: adhikar-config
         - secretRef:
             name: auth-secrets
         env:
@@ -93,7 +93,7 @@ spec:
         - name: AUTH_REDIS_URL
           valueFrom:
             secretKeyRef:
-              name: haqdaar-shared
+              name: adhikar-shared
               key: REDIS_URL_AUTH
               optional: false
         resources:

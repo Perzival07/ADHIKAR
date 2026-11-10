@@ -1,10 +1,10 @@
 # Base = production-shaped defaults. Overlays (dev, prod) set images, scale, hosts and secrets.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: haqdaar
+namespace: adhikar
 labels:
 - pairs:
-    app.kubernetes.io/part-of: haqdaar
+    app.kubernetes.io/part-of: adhikar
   includeSelectors: false
 resources:
 - namespace.yaml
@@ -21,19 +21,19 @@ resources:
 - ingress.yaml
 - networkpolicies.yaml
 configMapGenerator:
-- name: haqdaar-config
+- name: adhikar-config
   literals:
   - AUTH_ENV=production
   - AUTH_EMAIL_BACKEND=smtp
   - AUTH_TRUST_FORWARDED_FOR=true
-  - AUTH_CORS_ORIGINS=https://app.haqdaar.example
+  - AUTH_CORS_ORIGINS=https://app.adhikar.example
   - RECO_ELIGIBILITY_URL=http://eligibility-service:8005
   - RECO_RETRIEVAL_URL=http://retrieval-service:8004
   - RECO_LLM_GATEWAY_URL=http://llm-gateway:8001
   - RECO_AUTH_MODE=optional
   - RECO_AUTH_JWKS_URL=http://auth-service:8006/.well-known/jwks.json
   - RECO_TRUST_FORWARDED_FOR=true
-  - RECO_CORS_ORIGINS=https://app.haqdaar.example
+  - RECO_CORS_ORIGINS=https://app.adhikar.example
   - RETRIEVAL_QDRANT_URL=http://qdrant:6333
   - RETRIEVAL_EMBEDDING_URL=http://embedding-service:8002
   - INGEST_QDRANT_URL=http://qdrant:6333
@@ -48,19 +48,19 @@ configMapGenerator:
   files:
   - models.yaml
 images:
-- name: ghcr.io/haqdaar/auth-service
+- name: ghcr.io/adhikar/auth-service
   newTag: latest
-- name: ghcr.io/haqdaar/recommendation-service
+- name: ghcr.io/adhikar/recommendation-service
   newTag: latest
-- name: ghcr.io/haqdaar/eligibility-service
+- name: ghcr.io/adhikar/eligibility-service
   newTag: latest
-- name: ghcr.io/haqdaar/retrieval-service
+- name: ghcr.io/adhikar/retrieval-service
   newTag: latest
-- name: ghcr.io/haqdaar/embedding-service
+- name: ghcr.io/adhikar/embedding-service
   newTag: latest
-- name: ghcr.io/haqdaar/llm-gateway
+- name: ghcr.io/adhikar/llm-gateway
   newTag: latest
-- name: ghcr.io/haqdaar/ingestion-service
+- name: ghcr.io/adhikar/ingestion-service
   newTag: latest
-- name: ghcr.io/haqdaar/scheme-docs
+- name: ghcr.io/adhikar/scheme-docs
   newTag: latest

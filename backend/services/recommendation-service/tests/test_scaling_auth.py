@@ -33,7 +33,7 @@ class Issuer:
 
     def token(self, sub="user-1", **over):
         now = int(time.time())
-        claims = {"sub": sub, "iss": "haqdaar-auth", "aud": "haqdaar-api", "iat": now, "exp": now + 300, **over}
+        claims = {"sub": sub, "iss": "adhikar-auth", "aud": "adhikar-api", "iat": now, "exp": now + 300, **over}
         return jwt.encode(claims, self.key, algorithm="ES256", headers={"kid": "k1"})
 
 

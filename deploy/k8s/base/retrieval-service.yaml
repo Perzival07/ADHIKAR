@@ -26,7 +26,7 @@ spec:
         prometheus.io/port: '8004'
         prometheus.io/path: /metrics
     spec:
-      serviceAccountName: haqdaar-workload
+      serviceAccountName: adhikar-workload
       automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
@@ -46,14 +46,14 @@ spec:
       initContainers: []
       containers:
       - name: retrieval-service
-        image: ghcr.io/haqdaar/retrieval-service:latest
+        image: ghcr.io/adhikar/retrieval-service:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
           containerPort: 8004
         envFrom:
         - configMapRef:
-            name: haqdaar-config
+            name: adhikar-config
         env:
         - name: PORT
           value: '8004'

@@ -1,8 +1,8 @@
-# Haqdaar backend: global context
+# ADHIKAR backend: global context
 
 (Extracted from ../plan.txt. Read this before changing any service.)
 
-Project: Haqdaar is a Flutter app (repo root) that helps Indian citizens find
+Project: ADHIKAR is a Flutter app (repo root) that helps Indian citizens find
 welfare schemes and internships. It has 1,184 schemes in
 lib/data/schemes_corpus.dart, a rule-based matcher in
 lib/core/services/scheme_engine.dart, and a citizen profile model in
@@ -75,7 +75,7 @@ Target layout:
     docker-compose.yml
     Makefile
     contracts/                 (OpenAPI specs + JSON Schemas, source of truth)
-    libs/haqdaar_common/       (logging + request-id ONLY)
+    libs/adhikar_common/       (logging + request-id ONLY)
     data/scheme_docs/          (THE DOCUMENTS FOLDER)
     services/
       llm-gateway/             :8001  provider-neutral text generation

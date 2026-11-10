@@ -1,6 +1,6 @@
 # Architecture
 
-Haqdaar is a Flutter app plus a backend of independent services. The app works fully offline (on-device rules);
+ADHIKAR is a Flutter app plus a backend of independent services. The app works fully offline (on-device rules);
 the backend adds real accounts and AI-ranked, source-cited recommendations.
 
 ```
@@ -34,7 +34,7 @@ the backend adds real accounts and AI-ranked, source-cited recommendations.
 | ingest (CronJob) | Folder -> chunks -> vectors; single writer | small PVC (manifest) | n/a |
 
 Services talk only over HTTP using the contracts in `backend/contracts/` (OpenAPI 3.1, generated from one Pydantic
-source; the auth API is snapshotted for the mobile client). No service imports another's code; `libs/haqdaar_common`
+source; the auth API is snapshotted for the mobile client). No service imports another's code; `libs/adhikar_common`
 holds infrastructure only (logging, request ids, metrics, circuit breaker, shared state, JWT verification).
 
 ## Key design choices

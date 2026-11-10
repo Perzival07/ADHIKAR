@@ -7,10 +7,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 import jwt
-from fastapi import Depends, FastAPI, Request, Response
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from haqdaar_common import (
+from adhikar_common import (
     AccessLogMiddleware,
     Registry,
     RequestIDMiddleware,
@@ -19,6 +16,9 @@ from haqdaar_common import (
     make_redis,
     setup_json_logging,
 )
+from fastapi import Depends, FastAPI, Request, Response
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 

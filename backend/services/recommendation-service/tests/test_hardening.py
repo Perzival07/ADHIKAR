@@ -121,7 +121,7 @@ def test_metrics_expose_pipeline_and_http_series(make_app, stack):
     assert "reco_llm_items_total" in text and "reco_mode_rag_total 1" in text
     for stage in ("eligibility", "retrieval", "llm"):
         assert f'reco_stage_seconds_count{{stage="{stage}"}}' in text
-    assert 'haqdaar_http_requests_total{service="recommendation-service",method="POST",route="/v1/recommendations",status="200"} 2' in text
+    assert 'adhikar_http_requests_total{service="recommendation-service",method="POST",route="/v1/recommendations",status="200"} 2' in text
 
 
 def test_metrics_hidden_from_openapi_and_protected_by_token(make_app):

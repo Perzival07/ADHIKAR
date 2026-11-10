@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Exact Haqdaar Brand Palette derived from Official Logo
+  // Exact ADHIKAR Brand Palette derived from Official Logo
   static const Color primaryNavy = Color(0xFF0B2545);
   static const Color deepNavy = Color(0xFF071B33);
   static const Color royalNavy = Color(0xFF153B68);

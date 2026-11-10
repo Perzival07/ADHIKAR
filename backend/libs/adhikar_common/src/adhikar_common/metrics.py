@@ -120,12 +120,12 @@ class Registry:
 
 
 class MetricsMiddleware:
-    """Records haqdaar_http_requests_total and haqdaar_http_request_duration_seconds per route template."""
+    """Records adhikar_http_requests_total and adhikar_http_request_duration_seconds per route template."""
 
     def __init__(self, app: ASGIApp, registry: Registry, service: str):
         self.app, self.service = app, service
-        self.requests = registry.counter("haqdaar_http_requests_total", "HTTP requests", ("service", "method", "route", "status"))
-        self.duration = registry.histogram("haqdaar_http_request_duration_seconds", "HTTP request duration", ("service", "method", "route"))
+        self.requests = registry.counter("adhikar_http_requests_total", "HTTP requests", ("service", "method", "route", "status"))
+        self.duration = registry.histogram("adhikar_http_request_duration_seconds", "HTTP request duration", ("service", "method", "route"))
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] != "http":

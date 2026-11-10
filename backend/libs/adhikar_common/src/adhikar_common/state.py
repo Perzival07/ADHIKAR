@@ -10,7 +10,7 @@ import time
 from collections import OrderedDict
 from typing import Protocol
 
-log = logging.getLogger("haqdaar_common.state")
+log = logging.getLogger("adhikar_common.state")
 
 
 class Cache(Protocol):

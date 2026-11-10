@@ -2,15 +2,15 @@ import json
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
-from haqdaar_common import (
+from adhikar_common import (
     AccessLogMiddleware,
     Registry,
     RequestIDMiddleware,
     install_metrics,
     setup_json_logging,
 )
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from sse_starlette.sse import EventSourceResponse
 
 from .config import Settings, get_settings

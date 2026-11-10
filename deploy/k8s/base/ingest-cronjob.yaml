@@ -1,4 +1,4 @@
-# Nightly ingestion (single writer, concurrencyPolicy Forbid). Run now: kubectl -n haqdaar create job --from=cronjob/ingest ingest-now
+# Nightly ingestion (single writer, concurrencyPolicy Forbid). Run now: kubectl -n adhikar create job --from=cronjob/ingest ingest-now
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -24,7 +24,7 @@ spec:
             app.kubernetes.io/component: job
         spec:
           restartPolicy: OnFailure
-          serviceAccountName: haqdaar-workload
+          serviceAccountName: adhikar-workload
           automountServiceAccountToken: false
           securityContext:
             runAsNonRoot: true
@@ -35,7 +35,7 @@ spec:
               type: RuntimeDefault
           initContainers:
           - name: scheme-docs
-            image: ghcr.io/haqdaar/scheme-docs:latest
+            image: ghcr.io/adhikar/scheme-docs:latest
             imagePullPolicy: IfNotPresent
             volumeMounts:
             - name: docs
@@ -55,7 +55,7 @@ spec:
                 memory: 64Mi
           containers:
           - name: ingest
-            image: ghcr.io/haqdaar/ingestion-service:latest
+            image: ghcr.io/adhikar/ingestion-service:latest
             imagePullPolicy: IfNotPresent
             command:
             - python
@@ -64,7 +64,7 @@ spec:
             - ingest
             envFrom:
             - configMapRef:
-                name: haqdaar-config
+                name: adhikar-config
             env:
             - name: INGEST_DOCS_DIR
               value: /data/scheme_docs

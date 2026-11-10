@@ -274,7 +274,7 @@ class _SplashScreenState extends State<SplashScreen>
                                     children: [
                                       // Brand Name in Royal Navy
                                       const Text(
-                                        'Haqdaar',
+                                        'ADHIKAR',
                                         style: TextStyle(
                                           fontSize: 32,
                                           fontWeight: FontWeight.w900,

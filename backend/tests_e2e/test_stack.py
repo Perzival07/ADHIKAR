@@ -227,5 +227,5 @@ def test_signup_login_and_authenticated_recommendations(stack):
 
 
 def test_demo_accounts_seeded_in_development(stack):
-    r = httpx.post(f"{AUTH}/v1/auth/login", json={"identifier": "citizen@haqdaar.gov.in", "password": "password123"})
+    r = httpx.post(f"{AUTH}/v1/auth/login", json={"identifier": "citizen@adhikar.gov.in", "password": "password123"})
     assert r.status_code == 200 and r.json()["user"]["name"] == "Rajesh Sharma"

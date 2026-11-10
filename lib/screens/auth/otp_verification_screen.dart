@@ -607,7 +607,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'The OTP was sent securely from haqdaar.connect@gmail.com. It is valid for 5 minutes. Check your Spam folder if not found in primary inbox.',
+                        'The OTP was sent securely from adhikar.connect@gmail.com. It is valid for 5 minutes. Check your Spam folder if not found in primary inbox.',
                         style: TextStyle(
                           fontSize: 12,
                           color: AppTheme.textMuted.withValues(alpha: 0.9),

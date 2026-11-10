@@ -3,7 +3,7 @@
 # Editable install with no version control (auth-service==0.1.0)
 # Editable install with no version control (eligibility-service==0.1.0)
 # Editable install with no version control (embedding-service==0.1.0)
-# Editable install with no version control (haqdaar-common==0.1.0)
+# Editable install with no version control (adhikar-common==0.1.0)
 # Editable install with no version control (ingestion-service==0.1.0)
 # Editable install with no version control (llm-gateway==0.1.0)
 # Editable install with no version control (recommendation-service==0.1.0)

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import httpx
-from haqdaar_common import CircuitBreaker, CircuitOpen, outbound_headers
+from adhikar_common import CircuitBreaker, CircuitOpen, outbound_headers
 
 
 class EmbeddingError(Exception):

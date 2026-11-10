@@ -7,8 +7,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:haqdaar/core/models/scheme_model.dart';
-import 'package:haqdaar/data/schemes_corpus.dart';
+import 'package:adhikar/core/models/scheme_model.dart';
+import 'package:adhikar/data/schemes_corpus.dart';
 
 const defaultOutDir = 'backend/data/scheme_docs';
 

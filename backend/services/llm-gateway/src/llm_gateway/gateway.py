@@ -5,7 +5,7 @@ import logging
 from collections.abc import AsyncIterator
 from typing import Any
 
-from haqdaar_common import Registry
+from adhikar_common import Registry
 
 from .config import Settings
 from .contract_models import ChatRequest, ChatResponse, ModelAliasInfo, Usage

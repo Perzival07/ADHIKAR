@@ -1,0 +1,22 @@
+# Containerised stack with a REAL local model server (plan P13), instead of the mock LLM + hash embedder.
+#   docker compose -f docker-compose.yml -f docker-compose.llm.yml up -d --build --wait
+# Containers cannot reach a server bound to 127.0.0.1 on the host, so this route requires Ollama to listen on an
+# interface Docker can reach (OLLAMA_HOST=0.0.0.0, firewalled to your machine). If you do not want that,
+# use the native stack instead (docker-compose.native.yml + scripts/dev_native.ps1). See SETUP_LOCAL_LLM.md.
+services:
+  llm-gateway:
+    environment:
+      LLMGW_MODELS_FILE: /config/models.yaml
+      LLMGW_OLLAMA_BASE_URL: http://host.docker.internal:11434
+      LLMGW_READ_TIMEOUT: "180"
+    volumes: [./services/llm-gateway/models.ollama.yaml:/config/models.yaml:ro]
+  embedding-service:
+    environment:
+      EMBED_PROVIDER: ollama           # the service image has no torch; use Ollama's embedder (ollama pull bge-m3)
+      EMBED_OLLAMA_MODEL: bge-m3
+      EMBED_OLLAMA_BASE_URL: http://host.docker.internal:11434
+    extra_hosts: ["host.docker.internal:host-gateway"]
+  recommendation-service:
+    environment:
+      RECO_LLM_TIMEOUT: "150"
+      RECO_REQUEST_DEADLINE: "180"

@@ -670,7 +670,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Why Haqdaar Exists Mission Callout
+            // Why ADHIKAR Exists Mission Callout
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -688,7 +688,7 @@ class HomeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          AppStrings.get('why_haqdaar_title', lang),
+                          AppStrings.get('why_adhikar_title', lang),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13.5,
@@ -697,7 +697,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          AppStrings.get('why_haqdaar_desc', lang),
+                          AppStrings.get('why_adhikar_desc', lang),
                           style: TextStyle(fontSize: 12, color: Colors.blue.shade900, height: 1.4),
                         ),
                       ],

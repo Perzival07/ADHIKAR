@@ -40,7 +40,7 @@ def scrape_counters(client: httpx.Client, target: str, token: str = "") -> dict[
     parsed = parse_prometheus(r.text)
     found = {}
     for name in COUNTERS:
-        for key in (name, f"haqdaar_{name}", f"reco_{name}"):
+        for key in (name, f"adhikar_{name}", f"reco_{name}"):
             if key in parsed:
                 found[name] = parsed[key]
                 break

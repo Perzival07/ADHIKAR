@@ -1,7 +1,7 @@
 import json
 import logging
 
-from haqdaar_common import (
+from adhikar_common import (
     RequestIDMiddleware,
     get_request_id,
     outbound_headers,

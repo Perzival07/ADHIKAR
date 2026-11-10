@@ -4,7 +4,7 @@ import logging
 from typing import Any
 
 import httpx
-from haqdaar_common import CircuitBreaker, CircuitOpen, outbound_headers
+from adhikar_common import CircuitBreaker, CircuitOpen, outbound_headers
 from qdrant_client import AsyncQdrantClient, models
 
 from .config import Settings

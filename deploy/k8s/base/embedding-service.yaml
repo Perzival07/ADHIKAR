@@ -27,7 +27,7 @@ spec:
         prometheus.io/port: '8002'
         prometheus.io/path: /metrics
     spec:
-      serviceAccountName: haqdaar-workload
+      serviceAccountName: adhikar-workload
       automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
@@ -47,14 +47,14 @@ spec:
       initContainers: []
       containers:
       - name: embedding-service
-        image: ghcr.io/haqdaar/embedding-service:latest
+        image: ghcr.io/adhikar/embedding-service:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
           containerPort: 8002
         envFrom:
         - configMapRef:
-            name: haqdaar-config
+            name: adhikar-config
         env:
         - name: PORT
           value: '8002'

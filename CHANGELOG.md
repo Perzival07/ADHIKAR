@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-11-11: ADHIKAR README, local-LLM wiring (plan P13 part A)
+
+### Added
+- **README rewritten for the ADHIKAR repository**: installation for every tool, run modes (app only, mock stack,
+  native stack with a real model, Kubernetes), architecture and data-flow diagrams (Mermaid + text), service/port/
+  contract table, function-level and file-level communication maps for the app and every backend service,
+  configuration reference, quality gates, documentation index.
+- **Local LLM setup** (`backend/SETUP_LOCAL_LLM.md`): GPU roles, Ollama stability settings, model candidates,
+  CPU embeddings (bge-m3), wiring, soak test, evaluation, troubleshooting.
+- `backend/services/llm-gateway/models.ollama.yaml`: the `recommender`/`translate` aliases on a local Ollama model;
+  `models.yaml` (mock) stays the default so CI and Kubernetes dev need no model server.
+- `backend/scripts/dev_native.ps1`: runs Qdrant/Redis/Postgres in Docker on loopback and the seven services from
+  `.venv`, so they can reach Ollama on `127.0.0.1` without exposing anything (`up | down | status | ingest | logs`).
+- `backend/docker-compose.native.yml` (infra on 127.0.0.1) and `backend/docker-compose.llm.yml` (containers on Ollama).
+- `backend/scripts/soak_test.py` + `make soak`: 30-minute sequential load with nvidia-smi logging and pass/fail.
+- Makefile works with Windows venvs (`.venv/Scripts`), `make eval` takes `EVAL_TARGET`/`EVAL_TAG`, new targets
+  `infra`, `up-llm`, `soak`.
+
+### Changed
+- **Renamed Haqdaar to ADHIKAR** (AI-Driven Hub for Indian Knowledge of Assistance & Rights) everywhere: app name and
+  translations (Hindi: अधिकार), Dart package, Android/iOS/desktop identifiers, Python package `adhikar_common`, image
+  names, Kubernetes namespace, JWT issuer/audience, Prometheus alert names, docs. Local app data and demo-login keys
+  stored under the old name are not migrated; demo email is now `citizen@adhikar.gov.in`.
+- Root `.env.example` no longer references an unused Gemini key; configuration is per service (`backend/services/*/.env.example`)
+  and per build (`--dart-define`).
+
 ## 2026-11-10 (later): production restructure for Kubernetes and user growth
 
 ### Added
